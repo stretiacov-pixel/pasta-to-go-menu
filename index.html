@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Pasta to go — меню</title>
-<meta name="description" content="Меню Pasta to go: выберите блюда и закажите прямо с телефона.">
+<title>Pasta to go — menu</title>
+<meta name="description" content="Pasta to go: menu and ordering from your phone.">
 <meta name="theme-color" content="#173323">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23f2c24a'/%3E%3Ctext x='32' y='41' font-family='Arial' font-weight='900' font-size='24' text-anchor='middle' fill='%232a2107'%3EPtG%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap">
 <style>
 [hidden] { display: none !important; }
 :root {
@@ -18,8 +18,10 @@
   --semolina: #f2c24a; --semolina-ink: #2a2107; --semolina-soft: #faefc9; --tomato: #c23d29; --tomato-soft: #f7e0da;
   --f-display: "Unbounded", "Arial Black", system-ui, sans-serif;
   --f-body: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --r: 16px;
+  --r: 18px;
 }
+:lang(ar) { --f-body: "Noto Sans Arabic", system-ui, sans-serif; --f-display: "Noto Sans Arabic", system-ui, sans-serif; }
+:lang(hi) { --f-body: "Noto Sans Devanagari", "Onest", system-ui, sans-serif; --f-display: "Noto Sans Devanagari", "Unbounded", system-ui, sans-serif; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0f1511; --surface: #171f19; --sunken: #212a23; --ink: #e8eee6; --ink-2: #b6c2b7; --muted: #8f9b90; --line: #2c372e;
@@ -40,17 +42,28 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 var(
 button, input, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 :focus-visible { outline: 3px solid var(--semolina); outline-offset: 2px; }
-.wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+.mark { width: 48px; height: 48px; border-radius: 15px; background: var(--semolina); color: var(--semolina-ink); display: grid; place-items: center; font: 700 14px/1 "Unbounded", "Arial Black", sans-serif; letter-spacing: -0.03em; flex: none; }
+
+/* language picker */
+.langs { min-height: 100vh; min-height: 100dvh; background: var(--deep); color: var(--deep-ink); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: calc(32px + env(safe-area-inset-top, 0px)) 20px calc(32px + env(safe-area-inset-bottom, 0px)); margin-bottom: calc(-96px - env(safe-area-inset-bottom, 0px)); }
+.langs .mark { width: 72px; height: 72px; border-radius: 22px; font-size: 21px; }
+.langs h1 { margin: 16px 0 4px; font: 700 28px/1.1 "Unbounded", "Arial Black", sans-serif; color: #fff; letter-spacing: -0.02em; }
+.langs p { margin: 0 0 28px; opacity: .8; font-size: 15px; text-align: center; }
+.langs ul { list-style: none; margin: 0; padding: 0; width: 100%; max-width: 380px; display: grid; gap: 10px; }
+.langs button { width: 100%; min-height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 20px; border-radius: 16px; border: 1.5px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: #fff; font-size: 19px; font-weight: 600; text-align: start; }
+.langs button small { font-size: 13px; font-weight: 500; opacity: .65; font-family: "Onest", system-ui, sans-serif; }
+.langs button[aria-current="true"] { background: var(--semolina); border-color: var(--semolina); color: var(--semolina-ink); }
+.langs button[lang="ar"] { font-family: "Noto Sans Arabic", system-ui, sans-serif; }
+.langs button[lang="hi"] { font-family: "Noto Sans Devanagari", system-ui, sans-serif; }
 
 /* header */
 .top { background: var(--deep); color: var(--deep-ink); padding: calc(18px + env(safe-area-inset-top, 0px)) 0 22px; }
 .brand { display: flex; align-items: center; gap: 12px; }
-.mark { width: 48px; height: 48px; border-radius: 15px; background: var(--semolina); color: var(--semolina-ink); display: grid; place-items: center; font: 700 14px/1 var(--f-display); letter-spacing: -0.03em; flex: none; }
-.brand h1 { margin: 0; font: 700 22px/1.1 var(--f-display); letter-spacing: -0.02em; color: #fff; }
+.brand h1 { margin: 0; font: 700 22px/1.1 "Unbounded", "Arial Black", sans-serif; letter-spacing: -0.02em; color: #fff; }
 .brand p { margin: 2px 0 0; font-size: 14px; opacity: .8; }
-.lang { margin-left: auto; display: flex; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; overflow: hidden; }
-.lang button { background: none; border: 0; padding: 8px 12px; font-size: 13px; font-weight: 600; color: var(--deep-ink); min-height: 36px; }
-.lang button[aria-pressed="true"] { background: var(--semolina); color: var(--semolina-ink); }
+.langbtn { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,.25); background: none; color: var(--deep-ink); border-radius: 999px; padding: 0 14px; min-height: 40px; font-size: 14px; font-weight: 600; }
+.langbtn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; }
 .state { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.08); }
 .state i { width: 9px; height: 9px; border-radius: 50%; background: #7bd59a; }
 .state.off i { background: #f0a090; }
@@ -64,23 +77,30 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 
 /* menu */
 .note { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--semolina-soft); color: var(--ink); font-size: 15px; }
-section.cat { scroll-margin-top: 72px; padding-top: 22px; }
-section.cat h2 { margin: 0 0 12px; font: 700 18px/1.2 var(--f-display); letter-spacing: -0.01em; }
-.dish { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 14px 14px 16px; margin-bottom: 10px; }
-.dish .info { flex: 1; min-width: 0; }
-.dish b { display: block; font-weight: 600; font-size: 17px; line-height: 1.25; }
-.dish .price { font: 500 15px var(--f-display); color: var(--basil); margin-top: 4px; font-variant-numeric: tabular-nums; }
-.dish.out { opacity: .55; }
-.dish.out .price { color: var(--muted); font-family: var(--f-body); font-size: 14px; }
-.add { flex: none; min-width: 48px; height: 48px; border-radius: 14px; border: 0; background: var(--basil); color: var(--basil-ink); font-size: 26px; line-height: 1; font-weight: 500; }
+section.cat { scroll-margin-top: 72px; padding-top: 24px; }
+section.cat h2 { margin: 0 0 14px; font: 700 20px/1.2 var(--f-display); letter-spacing: -0.01em; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+.dish { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; }
+.dish .ph { position: relative; aspect-ratio: 4 / 3; background: var(--sunken); overflow: hidden; }
+.dish .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dish .ph.noimg::after { content: "PtG"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 34px "Unbounded", sans-serif; color: var(--line); }
+.dish .ph .tag { position: absolute; inset-inline-start: 12px; top: 12px; background: rgba(24,38,28,.85); color: #fff; font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 999px; }
+.dish .body { padding: 14px 16px 16px; display: grid; gap: 10px; }
+.dish h3 { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.25; }
+.dish .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; }
+.dish .price { font: 500 18px var(--f-display); color: var(--basil); font-variant-numeric: tabular-nums; }
+.dish.out .ph img { filter: grayscale(1); opacity: .55; }
+.dish.out .price { color: var(--muted); }
+.add { flex: none; min-width: 48px; height: 48px; border-radius: 14px; border: 0; background: var(--basil); color: var(--basil-ink); font-size: 26px; line-height: 1; font-weight: 500; padding: 0 14px; }
 .step { flex: none; display: flex; align-items: center; background: var(--basil-soft); border-radius: 14px; }
-.step button { width: 44px; height: 48px; border: 0; background: none; font-size: 22px; font-weight: 600; color: var(--basil); }
-.step span { min-width: 22px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.step button { width: 46px; height: 48px; border: 0; background: none; font-size: 22px; font-weight: 600; color: var(--basil); }
+.step span { min-width: 24px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
 .empty { text-align: center; color: var(--muted); padding: 40px 12px; }
 
 /* bottom bar */
 .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to top, var(--bg) 70%, transparent); }
-.bar button { display: flex; width: 100%; max-width: 608px; margin: 0 auto; align-items: center; justify-content: space-between; gap: 12px; border: 0; border-radius: 16px; background: var(--semolina); color: var(--semolina-ink); padding: 0 20px; min-height: 58px; font-weight: 700; font-size: 17px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.bar button { display: flex; width: 100%; max-width: 728px; margin: 0 auto; align-items: center; justify-content: space-between; gap: 12px; border: 0; border-radius: 16px; background: var(--semolina); color: var(--semolina-ink); padding: 0 20px; min-height: 58px; font-weight: 700; font-size: 17px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
 .bar .sum { font-family: var(--f-display); font-weight: 500; font-variant-numeric: tabular-nums; }
 
 /* sheet */
@@ -90,6 +110,7 @@ section.cat h2 { margin: 0 0 12px; font: 700 18px/1.2 var(--f-display); letter-s
 .sheet h2 { margin: 0; font: 700 20px var(--f-display); }
 .x { border: 0; background: var(--sunken); width: 44px; height: 44px; border-radius: 50%; font-size: 22px; }
 .line { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.line img { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; flex: none; background: var(--sunken); }
 .line .info { flex: 1; min-width: 0; }
 .line .info small { display: block; color: var(--muted); font-variant-numeric: tabular-nums; }
 .total { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 0 6px; font-weight: 700; font-size: 18px; }
@@ -107,7 +128,7 @@ textarea { resize: vertical; min-height: 64px; }
 .track { padding-top: 24px; }
 .ticket { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 24px 20px; text-align: center; }
 .ticket .lbl { color: var(--muted); font-weight: 600; font-size: 15px; }
-.ticket .num { font: 700 72px/1 var(--f-display); letter-spacing: -0.04em; margin: 8px 0 4px; }
+.ticket .num { font: 700 72px/1 "Unbounded", sans-serif; letter-spacing: -0.04em; margin: 8px 0 4px; }
 .ticket .who { color: var(--ink-2); }
 .ticket .msg { margin: 20px 0 0; font-size: 19px; font-weight: 700; }
 .ticket .sub { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
@@ -127,18 +148,26 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px
   @keyframes up { from { transform: translateY(24px); opacity: .6; } }
   .ticket.ready { animation: pop .4s ease-out; }
   @keyframes pop { 50% { transform: scale(1.03); } }
+  .langs ul { animation: fade .3s ease-out; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } }
 }
 </style>
 </head>
 <body>
+<section class="langs" id="langView" hidden>
+  <div class="mark" aria-hidden="true">PtG</div>
+  <h1>Pasta to go</h1>
+  <p>Alegeți limba · Choose your language · Выберите язык</p>
+  <ul id="langList"></ul>
+</section>
+
+<div id="app" hidden>
 <header class="top">
   <div class="wrap">
     <div class="brand">
       <div class="mark" aria-hidden="true">PtG</div>
       <div><h1>Pasta to go</h1><p data-t="tagline"></p></div>
-      <div class="lang" role="group" aria-label="Язык / Limba">
-        <button type="button" data-lang="ru">RU</button><button type="button" data-lang="ro">RO</button>
-      </div>
+      <button type="button" class="langbtn" id="changeLang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span id="langCode"></span></button>
     </div>
     <div class="state" id="state" hidden><i></i><span></span></div>
   </div>
@@ -166,12 +195,13 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px
 </main>
 
 <footer data-t="footer"></footer>
+</div>
 
 <div class="bar" id="bar" hidden><button type="button" id="openCart"><span id="barText"></span><span class="sum" id="barSum"></span></button></div>
 
 <div class="sheet" id="sheet" hidden>
   <div class="panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-    <div class="head"><h2 id="sheetTitle" data-t="cart"></h2><button type="button" class="x" id="closeCart" aria-label="Закрыть">×</button></div>
+    <div class="head"><h2 id="sheetTitle" data-t="cart"></h2><button type="button" class="x" id="closeCart">×</button></div>
     <div id="lines"></div>
     <div class="total"><span data-t="total"></span><span id="total"></span></div>
     <form id="orderForm" novalidate>
@@ -190,6 +220,33 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px
 "use strict";
 const API = "https://jyrgkvbvvuaayllbqkbw.supabase.co/rest/v1/rpc/";
 const KEY = "sb_publishable_fOnR_AdHm971vgAfvfyQAg_o43A-3m6";
+const IMG_V = 1; // bump after replacing photos in img/ so phones fetch the new ones
+
+const LANGS = [
+  ["ro", "Română", "Romanian"], ["en", "English", "English"], ["ru", "Русский", "Russian"], ["it", "Italiano", "Italian"],
+  ["de", "Deutsch", "German"], ["ar", "العربية", "Arabic"], ["hi", "हिन्दी", "Hindi"],
+];
+const LOCALE = { ro: "ro-MD", en: "en-GB", ru: "ru-RU", it: "it-IT", de: "de-DE", ar: "ar-u-nu-latn", hi: "hi-IN-u-nu-latn" };
+
+/* Dish names by register id. Used only while the register name still matches `ru` — otherwise the register's own name is shown. */
+const DISH = {
+  carbonara:            { ru: "Карбонара", ro: "Carbonara", en: "Carbonara", it: "Carbonara", de: "Carbonara", ar: "كاربونارا", hi: "कार्बोनारा" },
+  bolognese:            { ru: "Болоньезе", ro: "Bolognese", en: "Bolognese", it: "Bolognese", de: "Bolognese", ar: "بولونيز", hi: "बोलोनीज़" },
+  arrabbiata:           { ru: "Арраббьята", ro: "Penne arrabbiata", en: "Penne arrabbiata", it: "Penne all'arrabbiata", de: "Penne Arrabbiata", ar: "بيني أرابياتا", hi: "पेने अर्राबियाता" },
+  "pesto-penne":        { ru: "Пенне песто", ro: "Penne cu pesto", en: "Penne with pesto", it: "Penne al pesto", de: "Penne mit Pesto", ar: "بيني بصلصة البيستو", hi: "पेस्तो पेने" },
+  americano:            { ru: "Американо", ro: "Americano", en: "Americano", it: "Caffè americano", de: "Americano", ar: "أمريكانو", hi: "अमेरिकानो" },
+  cappuccino:           { ru: "Капучино", ro: "Cappuccino", en: "Cappuccino", it: "Cappuccino", de: "Cappuccino", ar: "كابتشينو", hi: "कैपुचीनो" },
+  espresso:             { ru: "Эспрессо", ro: "Espresso", en: "Espresso", it: "Espresso", de: "Espresso", ar: "إسبريسو", hi: "एस्प्रेसो" },
+  "tea-black":          { ru: "Чай чёрный", ro: "Ceai negru", en: "Black tea", it: "Tè nero", de: "Schwarzer Tee", ar: "شاي أسود", hi: "काली चाय" },
+  "tea-green":          { ru: "Чай зелёный", ro: "Ceai verde", en: "Green tea", it: "Tè verde", de: "Grüner Tee", ar: "شاي أخضر", hi: "हरी चाय" },
+  "frozen-ravioli":     { ru: "Равиоли с рикоттой, 500 г", ro: "Ravioli cu ricotta, 500 g", en: "Ricotta ravioli, 500 g", it: "Ravioli di ricotta, 500 g", de: "Ricotta-Ravioli, 500 g", ar: "رافيولي بالريكوتا، 500 غ", hi: "रिकोटा रैवियोली, 500 ग्रा" },
+  "frozen-tagliatelle": { ru: "Тальятелле, 500 г", ro: "Tagliatelle, 500 g", en: "Tagliatelle, 500 g", it: "Tagliatelle, 500 g", de: "Tagliatelle, 500 g", ar: "تالياتيلي، 500 غ", hi: "टैग्लियाटेले, 500 ग्रा" },
+};
+const CAT = {
+  "Паста":     { ro: "Paste", en: "Pasta", it: "Pasta", de: "Pasta", ar: "باستا", hi: "पास्ता" },
+  "Напитки":   { ro: "Băuturi", en: "Drinks", it: "Bevande", de: "Getränke", ar: "مشروبات", hi: "पेय" },
+  "Заморозка": { ro: "Paste congelate", en: "Frozen pasta", it: "Pasta surgelata", de: "Tiefkühl-Pasta", ar: "باستا مجمدة", hi: "फ्रोज़न पास्ता" },
+};
 
 const T = {
   ru: {
@@ -207,7 +264,7 @@ const T = {
     e_name: "Напишите имя — так мы позовём вас, когда заказ будет готов.", e_closed: "Заказ через QR сейчас не принимается. Закажите, пожалуйста, на кассе.",
     e_busy: "Сейчас очень много заказов. Попробуйте через минуту или закажите на кассе.", e_unavailable: x => `«${x}» закончилось. Уберите это из заказа.`,
     e_net: "Нет связи. Проверьте интернет и попробуйте ещё раз.", e_menu: "Не удалось загрузить меню. Обновите страницу.", empty: "Меню пока пустое.",
-    remove: "Убрать одну", addOne: "Добавить", cur: "лей",
+    remove: "Убрать одну", addOne: "Добавить", close: "Закрыть", cur: "лей", langLabel: "Язык",
   },
   ro: {
     tagline: "Paste proaspete la pachet", loading: "Se încarcă meniul…", open: "Primim comenzi", closed: "Comanda prin QR nu este disponibilă acum",
@@ -224,7 +281,92 @@ const T = {
     e_name: "Scrieți numele — așa vă chemăm când comanda e gata.", e_closed: "Acum nu primim comenzi prin QR. Vă rugăm comandați la casă.",
     e_busy: "Sunt foarte multe comenzi acum. Încercați peste un minut sau comandați la casă.", e_unavailable: x => `„${x}” s-a terminat. Scoateți-l din comandă.`,
     e_net: "Fără conexiune. Verificați internetul și încercați din nou.", e_menu: "Meniul nu s-a încărcat. Reîncărcați pagina.", empty: "Meniul este gol deocamdată.",
-    remove: "Scoate unul", addOne: "Adaugă", cur: "lei",
+    remove: "Scoate unul", addOne: "Adaugă", close: "Închide", cur: "lei", langLabel: "Limba",
+  },
+  en: {
+    tagline: "Fresh pasta to go", loading: "Loading the menu…", open: "Taking orders", closed: "QR ordering is not available right now",
+    closedNote: "We are not taking phone orders right now — have a look at the menu and order at the counter.",
+    out: "Sold out", cart: "Your order", total: "Total", name: "Name", nameHint: "— we'll call you when it's ready",
+    comment: "Comment", optional: "(optional)", payInfo: "Pay at the counter when you collect — cash or card.",
+    send: "Place order", sending: "Sending…", items: n => `${n} ${n === 1 ? "item" : "items"}`, show: "Basket",
+    yourOrder: "Your order", newOrder: "Start a new order", footer: "Pasta to go · QR ordering",
+    s_new: ["Order sent", "Waiting for the cashier to accept it. Please go to the counter to pay."],
+    s_accepted: ["Being prepared", "Your order is accepted. We'll call your number when it's ready."],
+    s_ready: ["Ready! Collect at the counter", "Show this number at the counter."],
+    s_done: ["Collected", "Enjoy your meal!"],
+    s_cancelled: ["Order cancelled", "If this is a mistake, please come to the counter."],
+    e_name: "Please enter your name so we can call you when the order is ready.", e_closed: "We're not taking QR orders right now. Please order at the counter.",
+    e_busy: "We're very busy right now. Try again in a minute or order at the counter.", e_unavailable: x => `"${x}" is sold out. Please remove it from your order.`,
+    e_net: "No connection. Check your internet and try again.", e_menu: "Couldn't load the menu. Please refresh the page.", empty: "The menu is empty for now.",
+    remove: "Remove one", addOne: "Add", close: "Close", cur: "lei", langLabel: "Language",
+  },
+  it: {
+    tagline: "Pasta fresca da asporto", loading: "Caricamento del menù…", open: "Accettiamo ordini", closed: "Ordine tramite QR non disponibile ora",
+    closedNote: "Ora non accettiamo ordini dal telefono — potete guardare il menù e ordinare alla cassa.",
+    out: "Esaurito", cart: "Il tuo ordine", total: "Totale", name: "Nome", nameHint: "— ti chiamiamo quando è pronto",
+    comment: "Nota", optional: "(facoltativo)", payInfo: "Si paga alla cassa al ritiro — contanti o carta.",
+    send: "Invia ordine", sending: "Invio…", items: n => `${n} ${n === 1 ? "articolo" : "articoli"}`, show: "Carrello",
+    yourOrder: "Il tuo ordine", newOrder: "Nuovo ordine", footer: "Pasta to go · ordine tramite QR",
+    s_new: ["Ordine inviato", "Aspettiamo che il cassiere lo accetti. Passa alla cassa per pagare."],
+    s_accepted: ["In preparazione", "Ordine accettato. Chiameremo il tuo numero quando è pronto."],
+    s_ready: ["Pronto! Ritira alla cassa", "Mostra questo numero alla cassa."],
+    s_done: ["Ordine ritirato", "Buon appetito!"],
+    s_cancelled: ["Ordine annullato", "Se è un errore, vieni alla cassa."],
+    e_name: "Scrivi il tuo nome — così ti chiamiamo quando l'ordine è pronto.", e_closed: "Ora non accettiamo ordini tramite QR. Ordina alla cassa, per favore.",
+    e_busy: "Ci sono moltissimi ordini. Riprova tra un minuto o ordina alla cassa.", e_unavailable: x => `«${x}» è esaurito. Toglilo dall'ordine.`,
+    e_net: "Nessuna connessione. Controlla internet e riprova.", e_menu: "Impossibile caricare il menù. Ricarica la pagina.", empty: "Il menù è ancora vuoto.",
+    remove: "Togli uno", addOne: "Aggiungi", close: "Chiudi", cur: "lei", langLabel: "Lingua",
+  },
+  de: {
+    tagline: "Frische Pasta zum Mitnehmen", loading: "Menü wird geladen…", open: "Wir nehmen Bestellungen an", closed: "Bestellen per QR ist gerade nicht möglich",
+    closedNote: "Gerade nehmen wir keine Bestellungen per Handy an — sehen Sie sich das Menü an und bestellen Sie an der Kasse.",
+    out: "Ausverkauft", cart: "Ihre Bestellung", total: "Gesamt", name: "Name", nameHint: "— wir rufen Sie, wenn es fertig ist",
+    comment: "Anmerkung", optional: "(optional)", payInfo: "Bezahlung an der Kasse bei Abholung — bar oder mit Karte.",
+    send: "Bestellung senden", sending: "Wird gesendet…", items: n => `${n} ${n === 1 ? "Artikel" : "Artikel"}`, show: "Warenkorb",
+    yourOrder: "Ihre Bestellung", newOrder: "Neue Bestellung", footer: "Pasta to go · Bestellen per QR",
+    s_new: ["Bestellung gesendet", "Wir warten, bis die Kasse sie annimmt. Bitte zum Bezahlen an die Kasse kommen."],
+    s_accepted: ["Wird zubereitet", "Bestellung angenommen. Wir rufen Ihre Nummer, wenn sie fertig ist."],
+    s_ready: ["Fertig! Bitte an der Kasse abholen", "Zeigen Sie diese Nummer an der Kasse."],
+    s_done: ["Abgeholt", "Guten Appetit!"],
+    s_cancelled: ["Bestellung storniert", "Falls das ein Fehler ist, kommen Sie bitte zur Kasse."],
+    e_name: "Bitte Namen eingeben — so rufen wir Sie, wenn die Bestellung fertig ist.", e_closed: "Gerade keine Bestellungen per QR. Bitte an der Kasse bestellen.",
+    e_busy: "Gerade sehr viele Bestellungen. Bitte in einer Minute erneut versuchen oder an der Kasse bestellen.", e_unavailable: x => `„${x}“ ist ausverkauft. Bitte aus der Bestellung entfernen.`,
+    e_net: "Keine Verbindung. Bitte Internet prüfen und erneut versuchen.", e_menu: "Menü konnte nicht geladen werden. Bitte Seite neu laden.", empty: "Das Menü ist noch leer.",
+    remove: "Eins entfernen", addOne: "Hinzufügen", close: "Schließen", cur: "lei", langLabel: "Sprache",
+  },
+  ar: {
+    tagline: "باستا طازجة للطلبات الخارجية", loading: "جارٍ تحميل القائمة…", open: "نستقبل الطلبات", closed: "الطلب عبر رمز QR غير متاح الآن",
+    closedNote: "لا نستقبل الطلبات من الهاتف الآن — يمكنكم تصفح القائمة والطلب عند الصندوق.",
+    out: "نفدت الكمية", cart: "طلبك", total: "المجموع", name: "الاسم", nameHint: "— سننادي عليك عندما يجهز الطلب",
+    comment: "ملاحظة", optional: "(اختياري)", payInfo: "الدفع عند الصندوق عند الاستلام — نقدًا أو بالبطاقة.",
+    send: "إرسال الطلب", sending: "جارٍ الإرسال…", items: n => `${n} ${n === 1 ? "صنف" : "أصناف"}`, show: "السلة",
+    yourOrder: "طلبك", newOrder: "طلب جديد", footer: "Pasta to go · الطلب عبر QR",
+    s_new: ["تم إرسال الطلب", "ننتظر قبول الكاشير للطلب. يرجى التوجه إلى الصندوق للدفع."],
+    s_accepted: ["قيد التحضير", "تم قبول طلبك. سننادي برقمك عندما يجهز."],
+    s_ready: ["جاهز! استلمه من الصندوق", "أظهر هذا الرقم عند الصندوق."],
+    s_done: ["تم الاستلام", "بالهناء والشفاء!"],
+    s_cancelled: ["تم إلغاء الطلب", "إذا كان هذا خطأ، يرجى التوجه إلى الصندوق."],
+    e_name: "اكتب اسمك لننادي عليك عندما يجهز الطلب.", e_closed: "لا نستقبل الطلبات عبر QR الآن. يرجى الطلب عند الصندوق.",
+    e_busy: "هناك طلبات كثيرة جدًا الآن. حاول بعد دقيقة أو اطلب عند الصندوق.", e_unavailable: x => `«${x}» نفد. يرجى حذفه من الطلب.`,
+    e_net: "لا يوجد اتصال. تحقق من الإنترنت وحاول مرة أخرى.", e_menu: "تعذر تحميل القائمة. يرجى تحديث الصفحة.", empty: "القائمة فارغة حاليًا.",
+    remove: "إزالة واحد", addOne: "إضافة", close: "إغلاق", cur: "lei", langLabel: "اللغة",
+  },
+  hi: {
+    tagline: "ताज़ा पास्ता, साथ ले जाने के लिए", loading: "मेन्यू लोड हो रहा है…", open: "ऑर्डर लिए जा रहे हैं", closed: "अभी QR से ऑर्डर उपलब्ध नहीं है",
+    closedNote: "अभी फ़ोन से ऑर्डर नहीं लिए जा रहे — मेन्यू देखें और काउंटर पर ऑर्डर करें।",
+    out: "स्टॉक में नहीं", cart: "आपका ऑर्डर", total: "कुल", name: "नाम", nameHint: "— तैयार होने पर हम आपको बुलाएँगे",
+    comment: "टिप्पणी", optional: "(वैकल्पिक)", payInfo: "भुगतान काउंटर पर, ऑर्डर लेते समय — नकद या कार्ड से।",
+    send: "ऑर्डर भेजें", sending: "भेजा जा रहा है…", items: n => `${n} आइटम`, show: "टोकरी",
+    yourOrder: "आपका ऑर्डर", newOrder: "नया ऑर्डर", footer: "Pasta to go · QR से ऑर्डर",
+    s_new: ["ऑर्डर भेज दिया गया", "कैशियर के स्वीकार करने का इंतज़ार है। भुगतान के लिए काउंटर पर आएँ।"],
+    s_accepted: ["तैयार हो रहा है", "ऑर्डर स्वीकार हो गया। तैयार होने पर हम आपका नंबर पुकारेंगे।"],
+    s_ready: ["तैयार! काउंटर से ले लें", "यह नंबर काउंटर पर दिखाएँ।"],
+    s_done: ["ऑर्डर दे दिया गया", "खाने का आनंद लें!"],
+    s_cancelled: ["ऑर्डर रद्द हो गया", "अगर यह गलती है, तो काउंटर पर आएँ।"],
+    e_name: "अपना नाम लिखें — ऑर्डर तैयार होने पर हम आपको बुलाएँगे।", e_closed: "अभी QR से ऑर्डर नहीं लिए जा रहे। कृपया काउंटर पर ऑर्डर करें।",
+    e_busy: "अभी बहुत ज़्यादा ऑर्डर हैं। एक मिनट बाद कोशिश करें या काउंटर पर ऑर्डर करें।", e_unavailable: x => `"${x}" खत्म हो गया है। कृपया इसे ऑर्डर से हटाएँ।`,
+    e_net: "कनेक्शन नहीं है। इंटरनेट जाँचें और फिर कोशिश करें।", e_menu: "मेन्यू लोड नहीं हो सका। पेज रीफ़्रेश करें।", empty: "मेन्यू अभी खाली है।",
+    remove: "एक हटाएँ", addOne: "जोड़ें", close: "बंद करें", cur: "lei", langLabel: "भाषा",
   },
 };
 function plural(n, f) { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? f[0] : a >= 2 && a <= 4 && (b < 12 || b > 14) ? f[1] : f[2]; }
@@ -233,13 +375,21 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem("ptgqr-" + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { v == null ? localStorage.removeItem("ptgqr-" + k) : localStorage.setItem("ptgqr-" + k, JSON.stringify(v)); } catch {} },
 };
+const session = {
+  get(k) { try { return sessionStorage.getItem("ptgqr-" + k); } catch { return null; } },
+  set(k, v) { try { sessionStorage.setItem("ptgqr-" + k, v); } catch {} },
+};
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
-let lang = store.get("lang", (navigator.language || "").toLowerCase().startsWith("ro") ? "ro" : "ru");
+let lang = store.get("lang", null);
+if (!T[lang]) lang = null;
 let menu = null, cart = store.get("cart", {}), activeOrder = store.get("order", null), pollTimer = null, sending = false;
-const t = k => T[lang][k];
-const money = v => `${(+v).toLocaleString(lang === "ro" ? "ro-MD" : "ru-RU", { maximumFractionDigits: 2 })} ${t("cur")}`;
+const t = k => T[lang || "en"][k];
+const money = v => `${(+v).toLocaleString(LOCALE[lang] || "en-GB", { maximumFractionDigits: 2 })} ${t("cur")}`;
+const dishName = d => { const x = DISH[d.id]; return x && x.ru === d.name && x[lang] ? x[lang] : d.name; };
+const catName = c => (lang !== "ru" && CAT[c]?.[lang]) || c;
+const img = id => `img/${encodeURIComponent(id)}.jpg?v=${IMG_V}`;
 
 async function rpc(fn, body = {}) {
   const r = await fetch(API + fn, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
@@ -248,11 +398,26 @@ async function rpc(fn, body = {}) {
   return data;
 }
 
+/* ---------- language ---------- */
+function showLangPicker() {
+  $("#langList").innerHTML = LANGS.map(([c, native, en]) => `<li><button type="button" data-pick="${c}" lang="${c}"${c === lang ? ' aria-current="true"' : ""}><span>${native}</span>${native !== en ? `<small>${en}</small>` : ""}</button></li>`).join("");
+  $("#langView").hidden = false; $("#app").hidden = true; $("#bar").hidden = true;
+  document.documentElement.lang = lang || "en"; document.documentElement.dir = "ltr";
+  window.scrollTo(0, 0);
+}
+function pickLang(c) {
+  lang = c; store.set("lang", c); session.set("langChosen", "1");
+  $("#langView").hidden = true; $("#app").hidden = false;
+  applyLang(); window.scrollTo(0, 0);
+}
+
 /* ---------- render ---------- */
 function applyLang() {
-  document.documentElement.lang = lang;
-  document.querySelectorAll("[data-t]").forEach(el => { const v = t(el.dataset.t); if (typeof v === "string") el.textContent = v; });
-  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll("#app [data-t], #sheet [data-t]").forEach(el => { const v = t(el.dataset.t); if (typeof v === "string") el.textContent = v; });
+  $("#langCode").textContent = LANGS.find(l => l[0] === lang)[1];
+  $("#changeLang").setAttribute("aria-label", t("langLabel"));
+  $("#closeCart").setAttribute("aria-label", t("close"));
   $("#send").textContent = t("send");
   renderMenu(); renderCart(); renderTrack();
 }
@@ -261,47 +426,52 @@ function cats() { const out = []; (menu?.items || []).forEach(i => { if (!out.in
 const slug = c => "c-" + [...c].map(ch => ch.charCodeAt(0).toString(36)).join("");
 
 function renderMenu() {
-  if (!menu) return;
+  if (!menu || !lang) return;
   const st = $("#state"); st.hidden = false; st.classList.toggle("off", !menu.accepting);
-  $("span", st).textContent = menu.accepting ? t("open") : t("closed");
+  st.querySelector("span").textContent =menu.accepting ? t("open") : t("closed");
   $("#closedNote").hidden = menu.accepting; $("#closedNote").textContent = t("closedNote");
   const list = cats();
-  $("#cats").hidden = list.length < 2;
-  $("#catList").innerHTML = list.map((c, i) => `<button type="button" data-go="${slug(c)}"${i === 0 ? ' aria-current="true"' : ""}>${esc(c)}</button>`).join("");
+  $("#cats").hidden = list.length < 2 || !!activeOrder;
+  $("#catList").innerHTML = list.map((c, i) => `<button type="button" data-go="${slug(c)}"${i === 0 ? ' aria-current="true"' : ""}>${esc(catName(c))}</button>`).join("");
   if (!menu.items.length) { $("#menu").innerHTML = `<p class="empty">${t("empty")}</p>`; return; }
-  $("#menu").innerHTML = list.map(c => `<section class="cat" id="${slug(c)}"><h2>${esc(c)}</h2>${menu.items.filter(i => i.category === c).map(dishHTML).join("")}</section>`).join("");
+  $("#menu").innerHTML = list.map(c => `<section class="cat" id="${slug(c)}"><h2>${esc(catName(c))}</h2><div class="grid">${menu.items.filter(i => i.category === c).map(dishHTML).join("")}</div></section>`).join("");
   watchCats();
 }
 function dishHTML(d) {
-  const q = cart[d.id] || 0, can = menu.accepting && d.available;
-  const ctl = !can ? "" : q ? stepHTML(d.id, q) : `<button type="button" class="add" data-inc="${esc(d.id)}" aria-label="${t("addOne")}: ${esc(d.name)}">+</button>`;
-  return `<div class="dish${d.available ? "" : " out"}"><div class="info"><b>${esc(d.name)}</b><div class="price">${d.available ? money(d.price) : t("out")}</div></div>${ctl}</div>`;
+  const q = cart[d.id] || 0, can = menu.accepting && d.available, name = dishName(d);
+  const ctl = !can ? "" : q ? stepHTML(d.id, q) : `<button type="button" class="add" data-inc="${esc(d.id)}" aria-label="${esc(t("addOne"))}: ${esc(name)}">+</button>`;
+  return `<article class="dish${d.available ? "" : " out"}">
+    <div class="ph"><img src="${img(d.id)}" alt="" loading="lazy" decoding="async" data-ph>${d.available ? "" : `<span class="tag">${t("out")}</span>`}</div>
+    <div class="body"><h3>${esc(name)}</h3><div class="row"><span class="price">${money(d.price)}</span>${ctl}</div></div></article>`;
 }
-const stepHTML = (id, q) => `<div class="step"><button type="button" data-dec="${esc(id)}" aria-label="${t("remove")}">−</button><span>${q}</span><button type="button" data-inc="${esc(id)}" aria-label="${t("addOne")}">+</button></div>`;
+const stepHTML = (id, q) => `<div class="step"><button type="button" data-dec="${esc(id)}" aria-label="${esc(t("remove"))}">−</button><span>${q}</span><button type="button" data-inc="${esc(id)}" aria-label="${esc(t("addOne"))}">+</button></div>`;
+// photo missing → neutral placeholder instead of a broken image
+document.addEventListener("error", e => { const im = e.target; if (im.tagName === "IMG" && im.hasAttribute("data-ph")) { im.parentElement.classList.add("noimg"); im.remove(); } }, true);
 
 function cartLines() { return Object.entries(cart).map(([id, qty]) => ({ d: menu?.items.find(i => i.id === id), qty })).filter(l => l.d && l.d.available && l.qty > 0); }
 function renderCart() {
-  if (!menu) return;
+  if (!menu || !lang) return;
   const lines = cartLines(), count = lines.reduce((s, l) => s + l.qty, 0), sum = lines.reduce((s, l) => s + l.qty * l.d.price, 0);
-  $("#bar").hidden = !count || !menu.accepting || !$("#trackView").hidden;
+  $("#bar").hidden = !count || !menu.accepting || !!activeOrder || !$("#langView").hidden;
   $("#barText").textContent = `${t("show")} · ${t("items")(count)}`; $("#barSum").textContent = money(sum);
-  $("#lines").innerHTML = lines.map(l => `<div class="line"><div class="info"><b>${esc(l.d.name)}</b><small>${money(l.d.price)} × ${l.qty} = ${money(l.d.price * l.qty)}</small></div>${stepHTML(l.d.id, l.qty)}</div>`).join("");
+  $("#lines").innerHTML = lines.map(l => `<div class="line"><img src="${img(l.d.id)}" alt="" data-ph><div class="info"><b>${esc(dishName(l.d))}</b><small>${money(l.d.price)} × ${l.qty} = ${money(l.d.price * l.qty)}</small></div>${stepHTML(l.d.id, l.qty)}</div>`).join("");
   $("#total").textContent = money(sum);
   if (!count && !$("#sheet").hidden) closeSheet();
 }
 
 function renderTrack() {
+  if (!lang) return;
   const on = !!activeOrder;
-  $("#trackView").hidden = !on; $("#menuView").hidden = on; $("#cats").hidden = on || cats().length < 2;
+  $("#trackView").hidden = !on; $("#menuView").hidden = on;
   if (!on) return;
   const o = activeOrder, s = o.status || "new", [msg, sub] = t("s_" + s) || t("s_new");
   $("#tNum").textContent = o.num; $("#tWho").textContent = o.name || ""; $("#tMsg").textContent = msg; $("#tSub").textContent = sub;
   const tk = $("#ticket"); tk.className = "ticket" + (s === "ready" || s === "done" ? " ready" : s === "cancelled" ? " cancelled" : "");
   const lvl = { new: 1, accepted: 2, ready: 3, done: 3, cancelled: 0 }[s] ?? 1;
   tk.querySelectorAll(".steps div").forEach((d, i) => d.classList.toggle("on", i < lvl));
-  $("#tLines").innerHTML = (o.items || []).map(i => `<div class="line"><div class="info"><b>${esc(i.name)}</b><small>${money(i.price)} × ${i.qty}</small></div><b>${money(i.price * i.qty)}</b></div>`).join("")
+  $("#tLines").innerHTML = (o.items || []).map(i => `<div class="line"><div class="info"><b>${esc(dishName(i))}</b><small>${money(i.price)} × ${i.qty}</small></div><b>${money(i.price * i.qty)}</b></div>`).join("")
     + `<div class="total"><span>${t("total")}</span><span>${money(o.total)}</span></div>`;
-  $("#bar").hidden = true;
+  $("#bar").hidden = true; $("#cats").hidden = true;
 }
 
 /* ---------- category chips follow scroll ---------- */
@@ -311,19 +481,23 @@ function watchCats() {
   if (!("IntersectionObserver" in window)) return;
   catObs = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
-    document.querySelectorAll("#catList button").forEach(b => { const on = b.dataset.go === e.target.id; b.toggleAttribute("aria-current", on); if (on) b.setAttribute("aria-current", "true"); if (on) b.scrollIntoView({ block: "nearest", inline: "nearest" }); });
+    document.querySelectorAll("#catList button").forEach(b => {
+      const on = b.dataset.go === e.target.id;
+      if (on) { b.setAttribute("aria-current", "true"); b.scrollIntoView({ block: "nearest", inline: "nearest" }); } else b.removeAttribute("aria-current");
+    });
   }), { rootMargin: "-80px 0px -70% 0px" });
   document.querySelectorAll("section.cat").forEach(s => catObs.observe(s));
 }
 
 /* ---------- events ---------- */
 document.addEventListener("click", e => {
-  const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]"), go = e.target.closest("[data-go]"), lg = e.target.closest("[data-lang]");
-  if (inc) { const id = inc.dataset.inc; cart[id] = Math.min(20, (cart[id] || 0) + 1); saveCart(); }
+  const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]"), go = e.target.closest("[data-go]"), pick = e.target.closest("[data-pick]");
+  if (pick) pickLang(pick.dataset.pick);
+  else if (inc) { const id = inc.dataset.inc; cart[id] = Math.min(20, (cart[id] || 0) + 1); saveCart(); }
   else if (dec) { const id = dec.dataset.dec; cart[id] = (cart[id] || 0) - 1; if (cart[id] <= 0) delete cart[id]; saveCart(); }
   else if (go) document.getElementById(go.dataset.go)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  else if (lg) { lang = lg.dataset.lang; store.set("lang", lang); applyLang(); }
 });
+$("#changeLang").onclick = showLangPicker;
 function saveCart() { store.set("cart", cart); renderMenu(); renderCart(); }
 $("#openCart").onclick = () => { $("#err").hidden = true; $("#gName").value = $("#gName").value || store.get("name", ""); $("#sheet").hidden = false; document.body.style.overflow = "hidden"; };
 function closeSheet() { $("#sheet").hidden = true; document.body.style.overflow = ""; }
@@ -341,7 +515,7 @@ $("#orderForm").onsubmit = async e => {
   try {
     const r = await rpc("ptg_place_order", { p_items: lines.map(l => ({ id: l.d.id, qty: l.qty })), p_name: name, p_note: note || null });
     store.set("name", name);
-    activeOrder = { id: r.id, num: r.num, total: r.total, name, status: "new", items: lines.map(l => ({ name: l.d.name, qty: l.qty, price: l.d.price })) };
+    activeOrder = { id: r.id, num: r.num, total: r.total, name, status: "new", items: lines.map(l => ({ id: l.d.id, name: l.d.name, qty: l.qty, price: l.d.price })) };
     store.set("order", activeOrder); cart = {}; store.set("cart", cart); $("#gNote").value = "";
     closeSheet(); renderMenu(); renderCart(); renderTrack(); window.scrollTo(0, 0); poll();
   } catch (err) {
@@ -349,7 +523,7 @@ $("#orderForm").onsubmit = async e => {
     if (!err.api) showErr(t("e_net"));
     else if (m === "closed") { showErr(t("e_closed")); loadMenu(); }
     else if (m === "busy") showErr(t("e_busy"));
-    else if (m.startsWith("unavailable:")) { showErr(t("e_unavailable")(m.slice(12))); loadMenu(); }
+    else if (m.startsWith("unavailable:")) { const raw = m.slice(12), it = menu?.items.find(i => i.name === raw); showErr(t("e_unavailable")(it ? dishName(it) : raw)); loadMenu(); }
     else if (m === "bad_name") showErr(t("e_name"));
     else showErr(t("e_net"));
   } finally { sending = false; $("#send").disabled = false; $("#send").textContent = t("send"); }
@@ -359,7 +533,7 @@ $("#newOrder").onclick = () => { activeOrder = null; store.set("order", null); c
 /* ---------- data ---------- */
 async function loadMenu() {
   try { menu = await rpc("ptg_menu"); }
-  catch { if (!menu) $("#menu").innerHTML = `<p class="empty">${t("e_menu")}</p>`; return; }
+  catch { if (!menu && lang) $("#menu").innerHTML = `<p class="empty">${t("e_menu")}</p>`; return; }
   for (const id of Object.keys(cart)) if (!menu.items.some(i => i.id === id && i.available)) delete cart[id];
   store.set("cart", cart); renderMenu(); renderCart();
 }
@@ -378,8 +552,10 @@ async function poll() {
 }
 document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (activeOrder) poll(); else loadMenu(); } });
 
-applyLang();
+/* ---------- start: language first (skipped mid-order or once chosen in this visit) ---------- */
 loadMenu();
+if (lang && (activeOrder || session.get("langChosen"))) { $("#app").hidden = false; applyLang(); }
+else showLangPicker();
 if (activeOrder) poll();
 setInterval(() => { if (!activeOrder && !document.hidden) loadMenu(); }, 60000);
 </script>
