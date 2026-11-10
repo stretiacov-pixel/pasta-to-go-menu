@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pasta to go — меню</title>
+<meta name="description" content="Меню Pasta to go: выберите блюда и закажите прямо с телефона.">
+<meta name="theme-color" content="#173323">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23f2c24a'/%3E%3Ctext x='32' y='41' font-family='Arial' font-weight='900' font-size='24' text-anchor='middle' fill='%232a2107'%3EPtG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&display=swap">
+<style>
+[hidden] { display: none !important; }
+:root {
+  --bg: #f3f4ee; --surface: #ffffff; --sunken: #e9ebe3; --ink: #18261c; --ink-2: #48564b; --muted: #5f6b62; --line: #d9ddd1;
+  --deep: #173323; --deep-ink: #e4efe6; --basil: #2c7448; --basil-ink: #ffffff; --basil-soft: #dfeee3;
+  --semolina: #f2c24a; --semolina-ink: #2a2107; --semolina-soft: #faefc9; --tomato: #c23d29; --tomato-soft: #f7e0da;
+  --f-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1511; --surface: #171f19; --sunken: #212a23; --ink: #e8eee6; --ink-2: #b6c2b7; --muted: #8f9b90; --line: #2c372e;
+    --deep: #0a110c; --deep-ink: #d6e4d9; --basil: #62b783; --basil-ink: #0c1a10; --basil-soft: #1f3a28;
+    --semolina: #f0c654; --semolina-ink: #2a2107; --semolina-soft: #3a3118; --tomato: #f07a62; --tomato-soft: #3d221d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1511; --surface: #171f19; --sunken: #212a23; --ink: #e8eee6; --ink-2: #b6c2b7; --muted: #8f9b90; --line: #2c372e;
+  --deep: #0a110c; --deep-ink: #d6e4d9; --basil: #62b783; --basil-ink: #0c1a10; --basil-soft: #1f3a28;
+  --semolina: #f0c654; --semolina-ink: #2a2107; --semolina-soft: #3a3118; --tomato: #f07a62; --tomato-soft: #3d221d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 var(--f-body); -webkit-tap-highlight-color: transparent; padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-user-select: none; user-select: none; }
+:focus-visible { outline: 3px solid var(--semolina); outline-offset: 2px; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+/* header */
+.top { background: var(--deep); color: var(--deep-ink); padding: calc(18px + env(safe-area-inset-top, 0px)) 0 22px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.mark { width: 48px; height: 48px; border-radius: 15px; background: var(--semolina); color: var(--semolina-ink); display: grid; place-items: center; font: 700 14px/1 var(--f-display); letter-spacing: -0.03em; flex: none; }
+.brand h1 { margin: 0; font: 700 22px/1.1 var(--f-display); letter-spacing: -0.02em; color: #fff; }
+.brand p { margin: 2px 0 0; font-size: 14px; opacity: .8; }
+.lang { margin-left: auto; display: flex; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; overflow: hidden; }
+.lang button { background: none; border: 0; padding: 8px 12px; font-size: 13px; font-weight: 600; color: var(--deep-ink); min-height: 36px; }
+.lang button[aria-pressed="true"] { background: var(--semolina); color: var(--semolina-ink); }
+.state { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.08); }
+.state i { width: 9px; height: 9px; border-radius: 50%; background: #7bd59a; }
+.state.off i { background: #f0a090; }
+
+/* categories */
+.cats { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.cats .wrap { display: flex; gap: 8px; overflow-x: auto; padding-block: 12px; scrollbar-width: none; }
+.cats .wrap::-webkit-scrollbar { display: none; }
+.cats button { flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 9px 16px; font-weight: 600; font-size: 15px; min-height: 42px; }
+.cats button[aria-current="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* menu */
+.note { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--semolina-soft); color: var(--ink); font-size: 15px; }
+section.cat { scroll-margin-top: 72px; padding-top: 22px; }
+section.cat h2 { margin: 0 0 12px; font: 700 18px/1.2 var(--f-display); letter-spacing: -0.01em; }
+.dish { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 14px 14px 16px; margin-bottom: 10px; }
+.dish .info { flex: 1; min-width: 0; }
+.dish b { display: block; font-weight: 600; font-size: 17px; line-height: 1.25; }
+.dish .price { font: 500 15px var(--f-display); color: var(--basil); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.dish.out { opacity: .55; }
+.dish.out .price { color: var(--muted); font-family: var(--f-body); font-size: 14px; }
+.add { flex: none; min-width: 48px; height: 48px; border-radius: 14px; border: 0; background: var(--basil); color: var(--basil-ink); font-size: 26px; line-height: 1; font-weight: 500; }
+.step { flex: none; display: flex; align-items: center; background: var(--basil-soft); border-radius: 14px; }
+.step button { width: 44px; height: 48px; border: 0; background: none; font-size: 22px; font-weight: 600; color: var(--basil); }
+.step span { min-width: 22px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.empty { text-align: center; color: var(--muted); padding: 40px 12px; }
+
+/* bottom bar */
+.bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to top, var(--bg) 70%, transparent); }
+.bar button { display: flex; width: 100%; max-width: 608px; margin: 0 auto; align-items: center; justify-content: space-between; gap: 12px; border: 0; border-radius: 16px; background: var(--semolina); color: var(--semolina-ink); padding: 0 20px; min-height: 58px; font-weight: 700; font-size: 17px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.bar .sum { font-family: var(--f-display); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* sheet */
+.sheet { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; background: rgba(10,17,12,.55); }
+.sheet .panel { width: 100%; max-width: 640px; max-height: 92vh; overflow-y: auto; background: var(--surface); border-radius: 22px 22px 0 0; padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px)); }
+.sheet .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.sheet h2 { margin: 0; font: 700 20px var(--f-display); }
+.x { border: 0; background: var(--sunken); width: 44px; height: 44px; border-radius: 50%; font-size: 22px; }
+.line { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.line .info { flex: 1; min-width: 0; }
+.line .info small { display: block; color: var(--muted); font-variant-numeric: tabular-nums; }
+.total { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 0 6px; font-weight: 700; font-size: 18px; }
+.total span:last-child { font-family: var(--f-display); font-weight: 500; }
+label { display: block; font-weight: 600; font-size: 15px; margin: 14px 0 6px; }
+label small { font-weight: 400; color: var(--muted); }
+input, textarea { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 12px; padding: 12px 14px; font-size: 17px; }
+textarea { resize: vertical; min-height: 64px; }
+.pay { margin: 14px 0 0; color: var(--ink-2); font-size: 14px; }
+.cta { width: 100%; margin-top: 16px; min-height: 56px; border: 0; border-radius: 16px; background: var(--basil); color: var(--basil-ink); font-weight: 700; font-size: 17px; }
+.cta:disabled { opacity: .55; cursor: default; }
+.err { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: var(--tomato-soft); color: var(--tomato); font-weight: 600; font-size: 15px; }
+
+/* order tracker */
+.track { padding-top: 24px; }
+.ticket { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 24px 20px; text-align: center; }
+.ticket .lbl { color: var(--muted); font-weight: 600; font-size: 15px; }
+.ticket .num { font: 700 72px/1 var(--f-display); letter-spacing: -0.04em; margin: 8px 0 4px; }
+.ticket .who { color: var(--ink-2); }
+.ticket .msg { margin: 20px 0 0; font-size: 19px; font-weight: 700; }
+.ticket .sub { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
+.ticket.ready { background: var(--basil); border-color: var(--basil); color: var(--basil-ink); }
+.ticket.ready .lbl, .ticket.ready .who, .ticket.ready .sub { color: inherit; opacity: .85; }
+.ticket.cancelled { background: var(--tomato-soft); border-color: var(--tomato-soft); }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 18px; }
+.steps div { height: 6px; border-radius: 3px; background: var(--sunken); }
+.steps div.on { background: var(--semolina); }
+.ticket.ready .steps div { background: rgba(255,255,255,.9); }
+.recap { margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 16px; }
+.recap .line:last-child { border-bottom: 0; }
+.ghost { width: 100%; margin-top: 16px; min-height: 52px; border: 1px solid var(--line); background: var(--surface); border-radius: 16px; font-weight: 600; }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 16px 8px; }
+@media (prefers-reduced-motion: no-preference) {
+  .sheet .panel { animation: up .22s ease-out; }
+  @keyframes up { from { transform: translateY(24px); opacity: .6; } }
+  .ticket.ready { animation: pop .4s ease-out; }
+  @keyframes pop { 50% { transform: scale(1.03); } }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">PtG</div>
+      <div><h1>Pasta to go</h1><p data-t="tagline"></p></div>
+      <div class="lang" role="group" aria-label="Язык / Limba">
+        <button type="button" data-lang="ru">RU</button><button type="button" data-lang="ro">RO</button>
+      </div>
+    </div>
+    <div class="state" id="state" hidden><i></i><span></span></div>
+  </div>
+</header>
+
+<main id="menuView">
+  <nav class="cats" id="cats" hidden><div class="wrap" id="catList"></div></nav>
+  <div class="wrap">
+    <p class="note" id="closedNote" hidden></p>
+    <div id="menu"><p class="empty" data-t="loading"></p></div>
+  </div>
+</main>
+
+<main id="trackView" class="wrap track" hidden>
+  <div class="ticket" id="ticket">
+    <div class="lbl" data-t="yourOrder"></div>
+    <div class="num" id="tNum"></div>
+    <div class="who" id="tWho"></div>
+    <div class="steps" aria-hidden="true"><div></div><div></div><div></div></div>
+    <p class="msg" id="tMsg"></p>
+    <p class="sub" id="tSub"></p>
+  </div>
+  <div class="recap" id="tLines"></div>
+  <button type="button" class="ghost" id="newOrder" data-t="newOrder"></button>
+</main>
+
+<footer data-t="footer"></footer>
+
+<div class="bar" id="bar" hidden><button type="button" id="openCart"><span id="barText"></span><span class="sum" id="barSum"></span></button></div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="head"><h2 id="sheetTitle" data-t="cart"></h2><button type="button" class="x" id="closeCart" aria-label="Закрыть">×</button></div>
+    <div id="lines"></div>
+    <div class="total"><span data-t="total"></span><span id="total"></span></div>
+    <form id="orderForm" novalidate>
+      <label for="gName"><span data-t="name"></span> <small data-t="nameHint"></small></label>
+      <input id="gName" maxlength="40" autocomplete="given-name" required>
+      <label for="gNote"><span data-t="comment"></span> <small data-t="optional"></small></label>
+      <textarea id="gNote" maxlength="200" rows="2"></textarea>
+      <p class="pay" data-t="payInfo"></p>
+      <div class="err" id="err" role="alert" hidden></div>
+      <button type="submit" class="cta" id="send"></button>
+    </form>
+  </div>
+</div>
+
+<script>
+"use strict";
+const API = "https://jyrgkvbvvuaayllbqkbw.supabase.co/rest/v1/rpc/";
+const KEY = "sb_publishable_fOnR_AdHm971vgAfvfyQAg_o43A-3m6";
+
+const T = {
+  ru: {
+    tagline: "Свежая паста навынос", loading: "Загружаю меню…", open: "Принимаем заказы", closed: "Заказ через QR сейчас недоступен",
+    closedNote: "Сейчас заказ с телефона не принимается — меню можно посмотреть, а заказать на кассе.",
+    out: "Нет в наличии", cart: "Ваш заказ", total: "Итого", name: "Имя", nameHint: "— назовём, когда будет готово",
+    comment: "Комментарий", optional: "(необязательно)", payInfo: "Оплата на кассе при получении — наличными или картой.",
+    send: "Отправить заказ", sending: "Отправляю…", items: n => `${n} ${plural(n, ["позиция", "позиции", "позиций"])}`, show: "Корзина",
+    yourOrder: "Ваш заказ", newOrder: "Сделать новый заказ", footer: "Pasta to go · заказ через QR",
+    s_new: ["Заказ отправлен", "Ждём, пока кассир его примет. Подойдите к кассе, чтобы оплатить."],
+    s_accepted: ["Готовим", "Заказ принят. Назовём ваш номер, когда будет готово."],
+    s_ready: ["Готово! Заберите на кассе", "Покажите этот номер на кассе."],
+    s_done: ["Заказ выдан", "Приятного аппетита!"],
+    s_cancelled: ["Заказ отменён", "Если это ошибка — подойдите к кассе."],
+    e_name: "Напишите имя — так мы позовём вас, когда заказ будет готов.", e_closed: "Заказ через QR сейчас не принимается. Закажите, пожалуйста, на кассе.",
+    e_busy: "Сейчас очень много заказов. Попробуйте через минуту или закажите на кассе.", e_unavailable: x => `«${x}» закончилось. Уберите это из заказа.`,
+    e_net: "Нет связи. Проверьте интернет и попробуйте ещё раз.", e_menu: "Не удалось загрузить меню. Обновите страницу.", empty: "Меню пока пустое.",
+    remove: "Убрать одну", addOne: "Добавить", cur: "лей",
+  },
+  ro: {
+    tagline: "Paste proaspete la pachet", loading: "Se încarcă meniul…", open: "Primim comenzi", closed: "Comanda prin QR nu este disponibilă acum",
+    closedNote: "Acum nu primim comenzi de pe telefon — puteți vedea meniul și comanda la casă.",
+    out: "Indisponibil", cart: "Comanda dvs.", total: "Total", name: "Nume", nameHint: "— vă strigăm când e gata",
+    comment: "Comentariu", optional: "(opțional)", payInfo: "Plata la casă la ridicare — numerar sau card.",
+    send: "Trimite comanda", sending: "Se trimite…", items: n => `${n} ${n === 1 ? "produs" : "produse"}`, show: "Coș",
+    yourOrder: "Comanda dvs.", newOrder: "Comandă nouă", footer: "Pasta to go · comandă prin QR",
+    s_new: ["Comanda a fost trimisă", "Așteptăm confirmarea casierului. Treceți pe la casă pentru plată."],
+    s_accepted: ["Se prepară", "Comanda a fost acceptată. Vă strigăm numărul când e gata."],
+    s_ready: ["Gata! Ridicați de la casă", "Arătați acest număr la casă."],
+    s_done: ["Comanda a fost ridicată", "Poftă bună!"],
+    s_cancelled: ["Comanda a fost anulată", "Dacă e o greșeală — mergeți la casă."],
+    e_name: "Scrieți numele — așa vă chemăm când comanda e gata.", e_closed: "Acum nu primim comenzi prin QR. Vă rugăm comandați la casă.",
+    e_busy: "Sunt foarte multe comenzi acum. Încercați peste un minut sau comandați la casă.", e_unavailable: x => `„${x}” s-a terminat. Scoateți-l din comandă.`,
+    e_net: "Fără conexiune. Verificați internetul și încercați din nou.", e_menu: "Meniul nu s-a încărcat. Reîncărcați pagina.", empty: "Meniul este gol deocamdată.",
+    remove: "Scoate unul", addOne: "Adaugă", cur: "lei",
+  },
+};
+function plural(n, f) { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? f[0] : a >= 2 && a <= 4 && (b < 12 || b > 14) ? f[1] : f[2]; }
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("ptgqr-" + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { v == null ? localStorage.removeItem("ptgqr-" + k) : localStorage.setItem("ptgqr-" + k, JSON.stringify(v)); } catch {} },
+};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+let lang = store.get("lang", (navigator.language || "").toLowerCase().startsWith("ro") ? "ro" : "ru");
+let menu = null, cart = store.get("cart", {}), activeOrder = store.get("order", null), pollTimer = null, sending = false;
+const t = k => T[lang][k];
+const money = v => `${(+v).toLocaleString(lang === "ro" ? "ro-MD" : "ru-RU", { maximumFractionDigits: 2 })} ${t("cur")}`;
+
+async function rpc(fn, body = {}) {
+  const r = await fetch(API + fn, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const data = await r.json().catch(() => null);
+  if (!r.ok) throw Object.assign(new Error(data?.message || "http " + r.status), { api: true });
+  return data;
+}
+
+/* ---------- render ---------- */
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(el => { const v = t(el.dataset.t); if (typeof v === "string") el.textContent = v; });
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  $("#send").textContent = t("send");
+  renderMenu(); renderCart(); renderTrack();
+}
+
+function cats() { const out = []; (menu?.items || []).forEach(i => { if (!out.includes(i.category)) out.push(i.category); }); return out; }
+const slug = c => "c-" + [...c].map(ch => ch.charCodeAt(0).toString(36)).join("");
+
+function renderMenu() {
+  if (!menu) return;
+  const st = $("#state"); st.hidden = false; st.classList.toggle("off", !menu.accepting);
+  $("span", st).textContent = menu.accepting ? t("open") : t("closed");
+  $("#closedNote").hidden = menu.accepting; $("#closedNote").textContent = t("closedNote");
+  const list = cats();
+  $("#cats").hidden = list.length < 2;
+  $("#catList").innerHTML = list.map((c, i) => `<button type="button" data-go="${slug(c)}"${i === 0 ? ' aria-current="true"' : ""}>${esc(c)}</button>`).join("");
+  if (!menu.items.length) { $("#menu").innerHTML = `<p class="empty">${t("empty")}</p>`; return; }
+  $("#menu").innerHTML = list.map(c => `<section class="cat" id="${slug(c)}"><h2>${esc(c)}</h2>${menu.items.filter(i => i.category === c).map(dishHTML).join("")}</section>`).join("");
+  watchCats();
+}
+function dishHTML(d) {
+  const q = cart[d.id] || 0, can = menu.accepting && d.available;
+  const ctl = !can ? "" : q ? stepHTML(d.id, q) : `<button type="button" class="add" data-inc="${esc(d.id)}" aria-label="${t("addOne")}: ${esc(d.name)}">+</button>`;
+  return `<div class="dish${d.available ? "" : " out"}"><div class="info"><b>${esc(d.name)}</b><div class="price">${d.available ? money(d.price) : t("out")}</div></div>${ctl}</div>`;
+}
+const stepHTML = (id, q) => `<div class="step"><button type="button" data-dec="${esc(id)}" aria-label="${t("remove")}">−</button><span>${q}</span><button type="button" data-inc="${esc(id)}" aria-label="${t("addOne")}">+</button></div>`;
+
+function cartLines() { return Object.entries(cart).map(([id, qty]) => ({ d: menu?.items.find(i => i.id === id), qty })).filter(l => l.d && l.d.available && l.qty > 0); }
+function renderCart() {
+  if (!menu) return;
+  const lines = cartLines(), count = lines.reduce((s, l) => s + l.qty, 0), sum = lines.reduce((s, l) => s + l.qty * l.d.price, 0);
+  $("#bar").hidden = !count || !menu.accepting || !$("#trackView").hidden;
+  $("#barText").textContent = `${t("show")} · ${t("items")(count)}`; $("#barSum").textContent = money(sum);
+  $("#lines").innerHTML = lines.map(l => `<div class="line"><div class="info"><b>${esc(l.d.name)}</b><small>${money(l.d.price)} × ${l.qty} = ${money(l.d.price * l.qty)}</small></div>${stepHTML(l.d.id, l.qty)}</div>`).join("");
+  $("#total").textContent = money(sum);
+  if (!count && !$("#sheet").hidden) closeSheet();
+}
+
+function renderTrack() {
+  const on = !!activeOrder;
+  $("#trackView").hidden = !on; $("#menuView").hidden = on; $("#cats").hidden = on || cats().length < 2;
+  if (!on) return;
+  const o = activeOrder, s = o.status || "new", [msg, sub] = t("s_" + s) || t("s_new");
+  $("#tNum").textContent = o.num; $("#tWho").textContent = o.name || ""; $("#tMsg").textContent = msg; $("#tSub").textContent = sub;
+  const tk = $("#ticket"); tk.className = "ticket" + (s === "ready" || s === "done" ? " ready" : s === "cancelled" ? " cancelled" : "");
+  const lvl = { new: 1, accepted: 2, ready: 3, done: 3, cancelled: 0 }[s] ?? 1;
+  tk.querySelectorAll(".steps div").forEach((d, i) => d.classList.toggle("on", i < lvl));
+  $("#tLines").innerHTML = (o.items || []).map(i => `<div class="line"><div class="info"><b>${esc(i.name)}</b><small>${money(i.price)} × ${i.qty}</small></div><b>${money(i.price * i.qty)}</b></div>`).join("")
+    + `<div class="total"><span>${t("total")}</span><span>${money(o.total)}</span></div>`;
+  $("#bar").hidden = true;
+}
+
+/* ---------- category chips follow scroll ---------- */
+let catObs = null;
+function watchCats() {
+  catObs?.disconnect();
+  if (!("IntersectionObserver" in window)) return;
+  catObs = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    document.querySelectorAll("#catList button").forEach(b => { const on = b.dataset.go === e.target.id; b.toggleAttribute("aria-current", on); if (on) b.setAttribute("aria-current", "true"); if (on) b.scrollIntoView({ block: "nearest", inline: "nearest" }); });
+  }), { rootMargin: "-80px 0px -70% 0px" });
+  document.querySelectorAll("section.cat").forEach(s => catObs.observe(s));
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", e => {
+  const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]"), go = e.target.closest("[data-go]"), lg = e.target.closest("[data-lang]");
+  if (inc) { const id = inc.dataset.inc; cart[id] = Math.min(20, (cart[id] || 0) + 1); saveCart(); }
+  else if (dec) { const id = dec.dataset.dec; cart[id] = (cart[id] || 0) - 1; if (cart[id] <= 0) delete cart[id]; saveCart(); }
+  else if (go) document.getElementById(go.dataset.go)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  else if (lg) { lang = lg.dataset.lang; store.set("lang", lang); applyLang(); }
+});
+function saveCart() { store.set("cart", cart); renderMenu(); renderCart(); }
+$("#openCart").onclick = () => { $("#err").hidden = true; $("#gName").value = $("#gName").value || store.get("name", ""); $("#sheet").hidden = false; document.body.style.overflow = "hidden"; };
+function closeSheet() { $("#sheet").hidden = true; document.body.style.overflow = ""; }
+$("#closeCart").onclick = closeSheet;
+$("#sheet").addEventListener("click", e => { if (e.target.id === "sheet") closeSheet(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#sheet").hidden) closeSheet(); });
+
+function showErr(msg) { const el = $("#err"); el.textContent = msg; el.hidden = false; }
+$("#orderForm").onsubmit = async e => {
+  e.preventDefault(); if (sending) return;
+  const name = $("#gName").value.trim(), note = $("#gNote").value.trim(), lines = cartLines();
+  if (!name) { showErr(t("e_name")); $("#gName").focus(); return; }
+  if (!lines.length) return;
+  sending = true; $("#send").disabled = true; $("#send").textContent = t("sending"); $("#err").hidden = true;
+  try {
+    const r = await rpc("ptg_place_order", { p_items: lines.map(l => ({ id: l.d.id, qty: l.qty })), p_name: name, p_note: note || null });
+    store.set("name", name);
+    activeOrder = { id: r.id, num: r.num, total: r.total, name, status: "new", items: lines.map(l => ({ name: l.d.name, qty: l.qty, price: l.d.price })) };
+    store.set("order", activeOrder); cart = {}; store.set("cart", cart); $("#gNote").value = "";
+    closeSheet(); renderMenu(); renderCart(); renderTrack(); window.scrollTo(0, 0); poll();
+  } catch (err) {
+    const m = String(err.message || "");
+    if (!err.api) showErr(t("e_net"));
+    else if (m === "closed") { showErr(t("e_closed")); loadMenu(); }
+    else if (m === "busy") showErr(t("e_busy"));
+    else if (m.startsWith("unavailable:")) { showErr(t("e_unavailable")(m.slice(12))); loadMenu(); }
+    else if (m === "bad_name") showErr(t("e_name"));
+    else showErr(t("e_net"));
+  } finally { sending = false; $("#send").disabled = false; $("#send").textContent = t("send"); }
+};
+$("#newOrder").onclick = () => { activeOrder = null; store.set("order", null); clearTimeout(pollTimer); renderTrack(); renderMenu(); renderCart(); loadMenu(); };
+
+/* ---------- data ---------- */
+async function loadMenu() {
+  try { menu = await rpc("ptg_menu"); }
+  catch { if (!menu) $("#menu").innerHTML = `<p class="empty">${t("e_menu")}</p>`; return; }
+  for (const id of Object.keys(cart)) if (!menu.items.some(i => i.id === id && i.available)) delete cart[id];
+  store.set("cart", cart); renderMenu(); renderCart();
+}
+async function poll() {
+  clearTimeout(pollTimer);
+  if (!activeOrder) return;
+  try {
+    const o = await rpc("ptg_order_status", { p_id: activeOrder.id });
+    if (!o) { activeOrder = null; store.set("order", null); renderTrack(); renderMenu(); renderCart(); return; }
+    const was = activeOrder.status;
+    activeOrder = { ...activeOrder, status: o.status, num: o.num, total: o.total, items: o.items };
+    store.set("order", activeOrder); renderTrack();
+    if (was !== "ready" && o.status === "ready" && navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  } catch {}
+  if (activeOrder && !["done", "cancelled"].includes(activeOrder.status)) pollTimer = setTimeout(poll, document.hidden ? 20000 : 6000);
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (activeOrder) poll(); else loadMenu(); } });
+
+applyLang();
+loadMenu();
+if (activeOrder) poll();
+setInterval(() => { if (!activeOrder && !document.hidden) loadMenu(); }, 60000);
+</script>
+</body>
+</html>
