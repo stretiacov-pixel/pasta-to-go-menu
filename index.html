@@ -389,7 +389,8 @@ const t = k => T[lang || "en"][k];
 const money = v => `${(+v).toLocaleString(LOCALE[lang] || "en-GB", { maximumFractionDigits: 2 })} ${t("cur")}`;
 const dishName = d => { const x = DISH[d.id]; return x && x.ru === d.name && x[lang] ? x[lang] : d.name; };
 const catName = c => (lang !== "ru" && CAT[c]?.[lang]) || c;
-const img = id => `img/${encodeURIComponent(id)}.jpg?v=${IMG_V}`;
+// photo uploaded from the register wins; otherwise the temporary one in img/
+const img = id => menu?.items.find(i => i.id === id)?.photo || `img/${encodeURIComponent(id)}.jpg?v=${IMG_V}`;
 
 async function rpc(fn, body = {}) {
   const r = await fetch(API + fn, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
