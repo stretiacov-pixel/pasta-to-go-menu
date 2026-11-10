@@ -96,6 +96,16 @@ section.cat h2 { margin: 0 0 14px; font: 700 20px/1.2 var(--f-display); letter-s
 .step { flex: none; display: flex; align-items: center; background: var(--basil-soft); border-radius: 14px; }
 .step button { width: 46px; height: 48px; border: 0; background: none; font-size: 22px; font-weight: 600; color: var(--basil); }
 .step span { min-width: 24px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pick { flex: none; display: flex; align-items: center; gap: 10px; }
+.incart { font-weight: 700; color: var(--basil); font-size: 15px; font-variant-numeric: tabular-nums; }
+.line .info small.adds { color: var(--basil); font-weight: 600; }
+.aopt { display: flex; align-items: center; gap: 12px; margin: 0; padding: 14px 4px; border-bottom: 1px solid var(--line); font-weight: 600; font-size: 17px; cursor: pointer; }
+.aopt input { width: 24px; height: 24px; flex: none; accent-color: var(--basil); }
+.aopt span { flex: 1; }
+.aopt b { font: 500 16px var(--f-display); color: var(--basil); font-variant-numeric: tabular-nums; }
+.adish { display: flex; gap: 12px; align-items: center; margin: 4px 0 6px; }
+.adish img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; background: var(--sunken); }
+.adish p { margin: 0; color: var(--muted); font-weight: 600; }
 .empty { text-align: center; color: var(--muted); padding: 40px 12px; }
 
 /* bottom bar */
@@ -216,6 +226,15 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px
   </div>
 </div>
 
+<div class="sheet" id="aSheet" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="aTitle">
+    <div class="head"><h2 id="aTitle"></h2><button type="button" class="x" id="aClose">×</button></div>
+    <div class="adish"><img id="aImg" alt=""><p data-t="addonsTitle"></p></div>
+    <div id="aOpts"></div>
+    <button type="button" class="cta" id="aAdd"></button>
+  </div>
+</div>
+
 <script>
 "use strict";
 const API = "https://jyrgkvbvvuaayllbqkbw.supabase.co/rest/v1/rpc/";
@@ -242,6 +261,9 @@ const DISH = {
   "frozen-ravioli":     { ru: "Равиоли с рикоттой, 500 г", ro: "Ravioli cu ricotta, 500 g", en: "Ricotta ravioli, 500 g", it: "Ravioli di ricotta, 500 g", de: "Ricotta-Ravioli, 500 g", ar: "رافيولي بالريكوتا، 500 غ", hi: "रिकोटा रैवियोली, 500 ग्रा" },
   "frozen-tagliatelle": { ru: "Тальятелле, 500 г", ro: "Tagliatelle, 500 g", en: "Tagliatelle, 500 g", it: "Tagliatelle, 500 g", de: "Tagliatelle, 500 g", ar: "تالياتيلي، 500 غ", hi: "टैग्लियाटेले, 500 ग्रा" },
 };
+const ADDON = {
+  cheese: { ru: "Тёртый сыр сверху", ro: "Brânză rasă deasupra", en: "Grated cheese on top", it: "Formaggio grattugiato sopra", de: "Geriebener Käse obendrauf", ar: "جبن مبشور على الوجه", hi: "ऊपर से कसा हुआ चीज़" },
+};
 const CAT = {
   "Паста":     { ro: "Paste", en: "Pasta", it: "Pasta", de: "Pasta", ar: "باستا", hi: "पास्ता" },
   "Напитки":   { ro: "Băuturi", en: "Drinks", it: "Bevande", de: "Getränke", ar: "مشروبات", hi: "पेय" },
@@ -265,6 +287,7 @@ const T = {
     e_busy: "Сейчас очень много заказов. Попробуйте через минуту или закажите на кассе.", e_unavailable: x => `«${x}» закончилось. Уберите это из заказа.`,
     e_net: "Нет связи. Проверьте интернет и попробуйте ещё раз.", e_menu: "Не удалось загрузить меню. Обновите страницу.", empty: "Меню пока пустое.",
     remove: "Убрать одну", addOne: "Добавить", close: "Закрыть", cur: "лей", langLabel: "Язык",
+    addonsTitle: "Добавить к блюду", addToOrder: "Добавить в заказ", inCart: "в заказе",
   },
   ro: {
     tagline: "Paste proaspete la pachet", loading: "Se încarcă meniul…", open: "Primim comenzi", closed: "Comanda prin QR nu este disponibilă acum",
@@ -282,6 +305,7 @@ const T = {
     e_busy: "Sunt foarte multe comenzi acum. Încercați peste un minut sau comandați la casă.", e_unavailable: x => `„${x}” s-a terminat. Scoateți-l din comandă.`,
     e_net: "Fără conexiune. Verificați internetul și încercați din nou.", e_menu: "Meniul nu s-a încărcat. Reîncărcați pagina.", empty: "Meniul este gol deocamdată.",
     remove: "Scoate unul", addOne: "Adaugă", close: "Închide", cur: "lei", langLabel: "Limba",
+    addonsTitle: "Adăugați la preparat", addToOrder: "Adaugă în comandă", inCart: "în comandă",
   },
   en: {
     tagline: "Fresh pasta to go", loading: "Loading the menu…", open: "Taking orders", closed: "QR ordering is not available right now",
@@ -299,6 +323,7 @@ const T = {
     e_busy: "We're very busy right now. Try again in a minute or order at the counter.", e_unavailable: x => `"${x}" is sold out. Please remove it from your order.`,
     e_net: "No connection. Check your internet and try again.", e_menu: "Couldn't load the menu. Please refresh the page.", empty: "The menu is empty for now.",
     remove: "Remove one", addOne: "Add", close: "Close", cur: "lei", langLabel: "Language",
+    addonsTitle: "Add to your dish", addToOrder: "Add to order", inCart: "in order",
   },
   it: {
     tagline: "Pasta fresca da asporto", loading: "Caricamento del menù…", open: "Accettiamo ordini", closed: "Ordine tramite QR non disponibile ora",
@@ -316,6 +341,7 @@ const T = {
     e_busy: "Ci sono moltissimi ordini. Riprova tra un minuto o ordina alla cassa.", e_unavailable: x => `«${x}» è esaurito. Toglilo dall'ordine.`,
     e_net: "Nessuna connessione. Controlla internet e riprova.", e_menu: "Impossibile caricare il menù. Ricarica la pagina.", empty: "Il menù è ancora vuoto.",
     remove: "Togli uno", addOne: "Aggiungi", close: "Chiudi", cur: "lei", langLabel: "Lingua",
+    addonsTitle: "Aggiungi al piatto", addToOrder: "Aggiungi all'ordine", inCart: "nell'ordine",
   },
   de: {
     tagline: "Frische Pasta zum Mitnehmen", loading: "Menü wird geladen…", open: "Wir nehmen Bestellungen an", closed: "Bestellen per QR ist gerade nicht möglich",
@@ -333,6 +359,7 @@ const T = {
     e_busy: "Gerade sehr viele Bestellungen. Bitte in einer Minute erneut versuchen oder an der Kasse bestellen.", e_unavailable: x => `„${x}“ ist ausverkauft. Bitte aus der Bestellung entfernen.`,
     e_net: "Keine Verbindung. Bitte Internet prüfen und erneut versuchen.", e_menu: "Menü konnte nicht geladen werden. Bitte Seite neu laden.", empty: "Das Menü ist noch leer.",
     remove: "Eins entfernen", addOne: "Hinzufügen", close: "Schließen", cur: "lei", langLabel: "Sprache",
+    addonsTitle: "Zum Gericht dazu", addToOrder: "In die Bestellung", inCart: "bestellt",
   },
   ar: {
     tagline: "باستا طازجة للطلبات الخارجية", loading: "جارٍ تحميل القائمة…", open: "نستقبل الطلبات", closed: "الطلب عبر رمز QR غير متاح الآن",
@@ -350,6 +377,7 @@ const T = {
     e_busy: "هناك طلبات كثيرة جدًا الآن. حاول بعد دقيقة أو اطلب عند الصندوق.", e_unavailable: x => `«${x}» نفد. يرجى حذفه من الطلب.`,
     e_net: "لا يوجد اتصال. تحقق من الإنترنت وحاول مرة أخرى.", e_menu: "تعذر تحميل القائمة. يرجى تحديث الصفحة.", empty: "القائمة فارغة حاليًا.",
     remove: "إزالة واحد", addOne: "إضافة", close: "إغلاق", cur: "lei", langLabel: "اللغة",
+    addonsTitle: "أضف إلى الطبق", addToOrder: "أضف إلى الطلب", inCart: "في الطلب",
   },
   hi: {
     tagline: "ताज़ा पास्ता, साथ ले जाने के लिए", loading: "मेन्यू लोड हो रहा है…", open: "ऑर्डर लिए जा रहे हैं", closed: "अभी QR से ऑर्डर उपलब्ध नहीं है",
@@ -367,6 +395,7 @@ const T = {
     e_busy: "अभी बहुत ज़्यादा ऑर्डर हैं। एक मिनट बाद कोशिश करें या काउंटर पर ऑर्डर करें।", e_unavailable: x => `"${x}" खत्म हो गया है। कृपया इसे ऑर्डर से हटाएँ।`,
     e_net: "कनेक्शन नहीं है। इंटरनेट जाँचें और फिर कोशिश करें।", e_menu: "मेन्यू लोड नहीं हो सका। पेज रीफ़्रेश करें।", empty: "मेन्यू अभी खाली है।",
     remove: "एक हटाएँ", addOne: "जोड़ें", close: "बंद करें", cur: "lei", langLabel: "भाषा",
+    addonsTitle: "डिश में जोड़ें", addToOrder: "ऑर्डर में जोड़ें", inCart: "ऑर्डर में",
   },
 };
 function plural(n, f) { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? f[0] : a >= 2 && a <= 4 && (b < 12 || b > 14) ? f[1] : f[2]; }
@@ -388,6 +417,12 @@ let menu = null, cart = store.get("cart", {}), activeOrder = store.get("order", 
 const t = k => T[lang || "en"][k];
 const money = v => `${(+v).toLocaleString(LOCALE[lang] || "en-GB", { maximumFractionDigits: 2 })} ${t("cur")}`;
 const dishName = d => { const x = DISH[d.id]; return x && x.ru === d.name && x[lang] ? x[lang] : d.name; };
+const addonName = a => { const x = ADDON[a.id]; return x && x.ru === a.name && x[lang] ? x[lang] : a.name; };
+/* cart: { "dishId" | "dishId|addon1,addon2": qty } */
+const keyOf = (id, adds) => adds.length ? `${id}|${[...adds].sort().join(",")}` : id;
+const parseKey = k => { const [id, a] = k.split("|"); return { id, adds: a ? a.split(",") : [] }; };
+const addonsFor = d => (menu?.addons || []).filter(a => a.available && (a.categories || []).includes(d.category));
+const qtyOf = id => Object.entries(cart).reduce((s, [k, q]) => s + (parseKey(k).id === id ? q : 0), 0);
 const catName = c => (lang !== "ru" && CAT[c]?.[lang]) || c;
 // photo uploaded from the register wins; otherwise the temporary one in img/
 const img = id => menu?.items.find(i => i.id === id)?.photo || `img/${encodeURIComponent(id)}.jpg?v=${IMG_V}`;
@@ -415,7 +450,7 @@ function pickLang(c) {
 /* ---------- render ---------- */
 function applyLang() {
   document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-  document.querySelectorAll("#app [data-t], #sheet [data-t]").forEach(el => { const v = t(el.dataset.t); if (typeof v === "string") el.textContent = v; });
+  document.querySelectorAll("#app [data-t], #sheet [data-t], #aSheet [data-t]").forEach(el => { const v = t(el.dataset.t); if (typeof v === "string") el.textContent = v; });
   $("#langCode").textContent = LANGS.find(l => l[0] === lang)[1];
   $("#changeLang").setAttribute("aria-label", t("langLabel"));
   $("#closeCart").setAttribute("aria-label", t("close"));
@@ -439,8 +474,11 @@ function renderMenu() {
   watchCats();
 }
 function dishHTML(d) {
-  const q = cart[d.id] || 0, can = menu.accepting && d.available, name = dishName(d);
-  const ctl = !can ? "" : q ? stepHTML(d.id, q) : `<button type="button" class="add" data-inc="${esc(d.id)}" aria-label="${esc(t("addOne"))}: ${esc(name)}">+</button>`;
+  const can = menu.accepting && d.available, name = dishName(d), withAdds = addonsFor(d).length > 0;
+  const q = withAdds ? qtyOf(d.id) : cart[d.id] || 0;
+  const ctl = !can ? "" : withAdds
+    ? `<span class="pick">${q ? `<span class="incart">${q} ${esc(t("inCart"))}</span>` : ""}<button type="button" class="add" data-pickfor="${esc(d.id)}" aria-label="${esc(t("addOne"))}: ${esc(name)}">+</button></span>`
+    : q ? stepHTML(d.id, q) : `<button type="button" class="add" data-inc="${esc(d.id)}" aria-label="${esc(t("addOne"))}: ${esc(name)}">+</button>`;
   return `<article class="dish${d.available ? "" : " out"}">
     <div class="ph"><img src="${img(d.id)}" alt="" loading="lazy" decoding="async" data-ph>${d.available ? "" : `<span class="tag">${t("out")}</span>`}</div>
     <div class="body"><h3>${esc(name)}</h3><div class="row"><span class="price">${money(d.price)}</span>${ctl}</div></div></article>`;
@@ -449,13 +487,21 @@ const stepHTML = (id, q) => `<div class="step"><button type="button" data-dec="$
 // photo missing → neutral placeholder instead of a broken image
 document.addEventListener("error", e => { const im = e.target; if (im.tagName === "IMG" && im.hasAttribute("data-ph")) { im.parentElement.classList.add("noimg"); im.remove(); } }, true);
 
-function cartLines() { return Object.entries(cart).map(([id, qty]) => ({ d: menu?.items.find(i => i.id === id), qty })).filter(l => l.d && l.d.available && l.qty > 0); }
+function cartLines() {
+  return Object.entries(cart).map(([key, qty]) => {
+    const { id, adds } = parseKey(key), d = menu?.items.find(i => i.id === id);
+    const al = adds.map(a => (menu?.addons || []).find(x => x.id === a));
+    if (!d || al.some(a => !a)) return null;
+    return { key, d, qty, adds: al, unit: +d.price + al.reduce((s, a) => s + +a.price, 0) };
+  }).filter(l => l && l.d.available && l.adds.every(a => a.available) && l.qty > 0);
+}
+const addsLine = adds => adds?.length ? `<small class="adds">+ ${adds.map(a => esc(addonName(a))).join(", ")}</small>` : "";
 function renderCart() {
   if (!menu || !lang) return;
-  const lines = cartLines(), count = lines.reduce((s, l) => s + l.qty, 0), sum = lines.reduce((s, l) => s + l.qty * l.d.price, 0);
+  const lines = cartLines(), count = lines.reduce((s, l) => s + l.qty, 0), sum = lines.reduce((s, l) => s + l.qty * l.unit, 0);
   $("#bar").hidden = !count || !menu.accepting || !!activeOrder || !$("#langView").hidden;
   $("#barText").textContent = `${t("show")} · ${t("items")(count)}`; $("#barSum").textContent = money(sum);
-  $("#lines").innerHTML = lines.map(l => `<div class="line"><img src="${img(l.d.id)}" alt="" data-ph><div class="info"><b>${esc(dishName(l.d))}</b><small>${money(l.d.price)} × ${l.qty} = ${money(l.d.price * l.qty)}</small></div>${stepHTML(l.d.id, l.qty)}</div>`).join("");
+  $("#lines").innerHTML = lines.map(l => `<div class="line"><img src="${img(l.d.id)}" alt="" data-ph><div class="info"><b>${esc(dishName(l.d))}</b>${addsLine(l.adds)}<small>${money(l.unit)} × ${l.qty} = ${money(l.unit * l.qty)}</small></div>${stepHTML(l.key, l.qty)}</div>`).join("");
   $("#total").textContent = money(sum);
   if (!count && !$("#sheet").hidden) closeSheet();
 }
@@ -470,7 +516,7 @@ function renderTrack() {
   const tk = $("#ticket"); tk.className = "ticket" + (s === "ready" || s === "done" ? " ready" : s === "cancelled" ? " cancelled" : "");
   const lvl = { new: 1, accepted: 2, ready: 3, done: 3, cancelled: 0 }[s] ?? 1;
   tk.querySelectorAll(".steps div").forEach((d, i) => d.classList.toggle("on", i < lvl));
-  $("#tLines").innerHTML = (o.items || []).map(i => `<div class="line"><div class="info"><b>${esc(dishName(i))}</b><small>${money(i.price)} × ${i.qty}</small></div><b>${money(i.price * i.qty)}</b></div>`).join("")
+  $("#tLines").innerHTML = (o.items || []).map(i => `<div class="line"><div class="info"><b>${esc(dishName(i))}</b>${addsLine(i.addons)}<small>${money(i.price)} × ${i.qty}</small></div><b>${money(i.price * i.qty)}</b></div>`).join("")
     + `<div class="total"><span>${t("total")}</span><span>${money(o.total)}</span></div>`;
   $("#bar").hidden = true; $("#cats").hidden = true;
 }
@@ -493,7 +539,9 @@ function watchCats() {
 /* ---------- events ---------- */
 document.addEventListener("click", e => {
   const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]"), go = e.target.closest("[data-go]"), pick = e.target.closest("[data-pick]");
-  if (pick) pickLang(pick.dataset.pick);
+  const pf = e.target.closest("[data-pickfor]");
+  if (pf) openAddons(pf.dataset.pickfor);
+  else if (pick) pickLang(pick.dataset.pick);
   else if (inc) { const id = inc.dataset.inc; cart[id] = Math.min(20, (cart[id] || 0) + 1); saveCart(); }
   else if (dec) { const id = dec.dataset.dec; cart[id] = (cart[id] || 0) - 1; if (cart[id] <= 0) delete cart[id]; saveCart(); }
   else if (go) document.getElementById(go.dataset.go)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
@@ -504,7 +552,27 @@ $("#openCart").onclick = () => { $("#err").hidden = true; $("#gName").value = $(
 function closeSheet() { $("#sheet").hidden = true; document.body.style.overflow = ""; }
 $("#closeCart").onclick = closeSheet;
 $("#sheet").addEventListener("click", e => { if (e.target.id === "sheet") closeSheet(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#sheet").hidden) closeSheet(); });
+document.addEventListener("keydown", e => { if (e.key !== "Escape") return; if (!$("#aSheet").hidden) closeAddons(); else if (!$("#sheet").hidden) closeSheet(); });
+
+/* add-on picker */
+let aDish = null;
+function openAddons(id) {
+  aDish = menu?.items.find(i => i.id === id); if (!aDish) return;
+  $("#aTitle").textContent = dishName(aDish);
+  $("#aImg").src = img(aDish.id);
+  $("#aOpts").innerHTML = addonsFor(aDish).map(a => `<label class="aopt"><input type="checkbox" value="${esc(a.id)}"><span>${esc(addonName(a))}</span><b>+${money(a.price)}</b></label>`).join("");
+  aPrice(); $("#aSheet").hidden = false; document.body.style.overflow = "hidden";
+}
+function aChecked() { return [...$("#aOpts").querySelectorAll("input:checked")].map(i => i.value); }
+function aPrice() {
+  const sum = +aDish.price + aChecked().reduce((s, id) => s + +(menu.addons.find(a => a.id === id)?.price || 0), 0);
+  $("#aAdd").textContent = `${t("addToOrder")} · ${money(sum)}`;
+}
+function closeAddons() { $("#aSheet").hidden = true; document.body.style.overflow = ""; aDish = null; }
+$("#aOpts").addEventListener("change", aPrice);
+$("#aClose").onclick = closeAddons;
+$("#aSheet").addEventListener("click", e => { if (e.target.id === "aSheet") closeAddons(); });
+$("#aAdd").onclick = () => { const k = keyOf(aDish.id, aChecked()); cart[k] = Math.min(20, (cart[k] || 0) + 1); closeAddons(); saveCart(); };
 
 function showErr(msg) { const el = $("#err"); el.textContent = msg; el.hidden = false; }
 $("#orderForm").onsubmit = async e => {
@@ -514,9 +582,9 @@ $("#orderForm").onsubmit = async e => {
   if (!lines.length) return;
   sending = true; $("#send").disabled = true; $("#send").textContent = t("sending"); $("#err").hidden = true;
   try {
-    const r = await rpc("ptg_place_order", { p_items: lines.map(l => ({ id: l.d.id, qty: l.qty })), p_name: name, p_note: note || null });
+    const r = await rpc("ptg_place_order", { p_items: lines.map(l => ({ id: l.d.id, qty: l.qty, addons: l.adds.map(a => a.id) })), p_name: name, p_note: note || null });
     store.set("name", name);
-    activeOrder = { id: r.id, num: r.num, total: r.total, name, status: "new", items: lines.map(l => ({ id: l.d.id, name: l.d.name, qty: l.qty, price: l.d.price })) };
+    activeOrder = { id: r.id, num: r.num, total: r.total, name, status: "new", items: lines.map(l => ({ id: l.d.id, name: l.d.name, qty: l.qty, price: l.unit, addons: l.adds })) };
     store.set("order", activeOrder); cart = {}; store.set("cart", cart); $("#gNote").value = "";
     closeSheet(); renderMenu(); renderCart(); renderTrack(); window.scrollTo(0, 0); poll();
   } catch (err) {
@@ -524,7 +592,7 @@ $("#orderForm").onsubmit = async e => {
     if (!err.api) showErr(t("e_net"));
     else if (m === "closed") { showErr(t("e_closed")); loadMenu(); }
     else if (m === "busy") showErr(t("e_busy"));
-    else if (m.startsWith("unavailable:")) { const raw = m.slice(12), it = menu?.items.find(i => i.name === raw); showErr(t("e_unavailable")(it ? dishName(it) : raw)); loadMenu(); }
+    else if (m.startsWith("unavailable:")) { const raw = m.slice(12), it = menu?.items.find(i => i.name === raw), ad = menu?.addons?.find(a => a.name === raw); showErr(t("e_unavailable")(it ? dishName(it) : ad ? addonName(ad) : raw)); loadMenu(); }
     else if (m === "bad_name") showErr(t("e_name"));
     else showErr(t("e_net"));
   } finally { sending = false; $("#send").disabled = false; $("#send").textContent = t("send"); }
@@ -535,7 +603,11 @@ $("#newOrder").onclick = () => { activeOrder = null; store.set("order", null); c
 async function loadMenu() {
   try { menu = await rpc("ptg_menu"); }
   catch { if (!menu && lang) $("#menu").innerHTML = `<p class="empty">${t("e_menu")}</p>`; return; }
-  for (const id of Object.keys(cart)) if (!menu.items.some(i => i.id === id && i.available)) delete cart[id];
+  menu.addons = menu.addons || [];
+  for (const k of Object.keys(cart)) {
+    const { id, adds } = parseKey(k);
+    if (!menu.items.some(i => i.id === id && i.available) || !adds.every(a => menu.addons.some(x => x.id === a && x.available))) delete cart[k];
+  }
   store.set("cart", cart); renderMenu(); renderCart();
 }
 async function poll() {
