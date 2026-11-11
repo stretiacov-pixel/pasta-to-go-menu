@@ -168,6 +168,10 @@ textarea { resize: vertical; min-height: 64px; }
 .recap { margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 16px; }
 .recap .line:last-child { border-bottom: 0; }
 .ghost { width: 100%; margin-top: 16px; min-height: 52px; border: 1px solid var(--line); background: var(--surface); border-radius: 16px; font-weight: 600; }
+.dish .alg { margin: -4px 0 0; font-size: 14px; line-height: 1.4; color: var(--ink-2); }
+.dish .alg b { font-weight: 600; }
+.aopt small.alg { display: block; margin-top: 2px; font-size: 13px; font-weight: 500; color: var(--muted); }
+.alnote { margin: 20px 0 0; padding: 14px 16px; border-radius: 14px; background: var(--semolina-soft); color: var(--ink); font-size: 14px; line-height: 1.45; }
 footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 16px 8px; }
 @media (prefers-reduced-motion: no-preference) {
   .sheet .panel { animation: up .22s ease-out; }
@@ -203,6 +207,7 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px
   <div class="wrap">
     <p class="note" id="closedNote" hidden></p>
     <div id="menu"><p class="empty" data-t="loading"></p></div>
+    <p class="alnote" data-t="alNote"></p>
   </div>
 </main>
 
@@ -276,6 +281,23 @@ const DISH = {
   "frozen-ravioli":     { ru: "Равиоли с рикоттой, 500 г", ro: "Ravioli cu ricotta, 500 g", en: "Ricotta ravioli, 500 g", it: "Ravioli di ricotta, 500 g", de: "Ricotta-Ravioli, 500 g", ar: "رافيولي بالريكوتا، 500 غ", hi: "रिकोटा रैवियोली, 500 ग्रा" },
   "frozen-tagliatelle": { ru: "Тальятелле, 500 г", ro: "Tagliatelle, 500 g", en: "Tagliatelle, 500 g", it: "Tagliatelle, 500 g", de: "Tagliatelle, 500 g", ar: "تالياتيلي، 500 غ", hi: "टैग्लियाटेले, 500 ग्रा" },
 };
+/* EU-14 allergens. Order: ru, ro, en, it, de, ar, hi */
+const ALG = Object.fromEntries(Object.entries({
+  gluten:      ["глютен", "gluten", "gluten", "glutine", "Gluten", "الغلوتين", "ग्लूटेन"],
+  crustaceans: ["ракообразные", "crustacee", "crustaceans", "crostacei", "Krebstiere", "القشريات", "क्रस्टेशियन"],
+  eggs:        ["яйца", "ouă", "eggs", "uova", "Eier", "البيض", "अंडे"],
+  fish:        ["рыба", "pește", "fish", "pesce", "Fisch", "السمك", "मछली"],
+  peanuts:     ["арахис", "arahide", "peanuts", "arachidi", "Erdnüsse", "الفول السوداني", "मूंगफली"],
+  soy:         ["соя", "soia", "soy", "soia", "Soja", "الصويا", "सोया"],
+  milk:        ["молоко", "lapte", "milk", "latte", "Milch", "الحليب", "दूध"],
+  nuts:        ["орехи", "nuci", "tree nuts", "frutta a guscio", "Schalenfrüchte", "المكسرات", "मेवे"],
+  celery:      ["сельдерей", "țelină", "celery", "sedano", "Sellerie", "الكرفس", "सेलेरी"],
+  mustard:     ["горчица", "muștar", "mustard", "senape", "Senf", "الخردل", "सरसों"],
+  sesame:      ["кунжут", "susan", "sesame", "sesamo", "Sesam", "السمسم", "तिल"],
+  sulphites:   ["сульфиты", "sulfiți", "sulphites", "solfiti", "Sulfite", "الكبريتيت", "सल्फाइट"],
+  lupin:       ["люпин", "lupin", "lupin", "lupini", "Lupinen", "الترمس", "ल्यूपिन"],
+  molluscs:    ["моллюски", "moluște", "molluscs", "molluschi", "Weichtiere", "الرخويات", "मोलस्क"],
+}).map(([k, v]) => [k, Object.fromEntries(["ru", "ro", "en", "it", "de", "ar", "hi"].map((l, i) => [l, v[i]]))]));
 const ADDON = {
   cheese: { ru: "Тёртый сыр сверху", ro: "Brânză rasă deasupra", en: "Grated cheese on top", it: "Formaggio grattugiato sopra", de: "Geriebener Käse obendrauf", ar: "جبن مبشور على الوجه", hi: "ऊपर से कसा हुआ चीज़" },
 };
@@ -293,6 +315,7 @@ const T = {
     comment: "Комментарий", optional: "(необязательно)", payInfo: "Оплата на кассе при получении — наличными или картой.",
     send: "Отправить заказ", sending: "Отправляю…", items: n => `${n} ${plural(n, ["позиция", "позиции", "позиций"])}`, show: "Корзина",
     yourOrder: "Ваш заказ", newOrder: "Сделать новый заказ", footer: "Pasta to go · заказ через QR",
+    allergens: "Аллергены", alNote: "Аллергены указаны по рецептуре. Если у вас аллергия, обязательно скажите кассиру.",
     s_new: ["Заказ отправлен", "Ждём, пока кассир его примет. Подойдите к кассе, чтобы оплатить."],
     s_accepted: ["Готовим", "Заказ принят. Назовём ваш номер, когда будет готово."],
     s_ready: ["Готово! Заберите на кассе", "Покажите этот номер на кассе."],
@@ -311,6 +334,7 @@ const T = {
     comment: "Comentariu", optional: "(opțional)", payInfo: "Plata la casă la ridicare — numerar sau card.",
     send: "Trimite comanda", sending: "Se trimite…", items: n => `${n} ${n === 1 ? "produs" : "produse"}`, show: "Coș",
     yourOrder: "Comanda dvs.", newOrder: "Comandă nouă", footer: "Pasta to go · comandă prin QR",
+    allergens: "Alergeni", alNote: "Alergenii sunt indicați conform rețetei. Dacă aveți o alergie, spuneți-i neapărat casierului.",
     s_new: ["Comanda a fost trimisă", "Așteptăm confirmarea casierului. Treceți pe la casă pentru plată."],
     s_accepted: ["Se prepară", "Comanda a fost acceptată. Vă strigăm numărul când e gata."],
     s_ready: ["Gata! Ridicați de la casă", "Arătați acest număr la casă."],
@@ -329,6 +353,7 @@ const T = {
     comment: "Comment", optional: "(optional)", payInfo: "Pay at the counter when you collect — cash or card.",
     send: "Place order", sending: "Sending…", items: n => `${n} ${n === 1 ? "item" : "items"}`, show: "Basket",
     yourOrder: "Your order", newOrder: "Start a new order", footer: "Pasta to go · QR ordering",
+    allergens: "Allergens", alNote: "Allergens are listed according to our recipes. If you have an allergy, please tell the cashier.",
     s_new: ["Order sent", "Waiting for the cashier to accept it. Please go to the counter to pay."],
     s_accepted: ["Being prepared", "Your order is accepted. We'll call your number when it's ready."],
     s_ready: ["Ready! Collect at the counter", "Show this number at the counter."],
@@ -347,6 +372,7 @@ const T = {
     comment: "Nota", optional: "(facoltativo)", payInfo: "Si paga alla cassa al ritiro — contanti o carta.",
     send: "Invia ordine", sending: "Invio…", items: n => `${n} ${n === 1 ? "articolo" : "articoli"}`, show: "Carrello",
     yourOrder: "Il tuo ordine", newOrder: "Nuovo ordine", footer: "Pasta to go · ordine tramite QR",
+    allergens: "Allergeni", alNote: "Gli allergeni sono indicati in base alle nostre ricette. Se hai un'allergia, avvisa il cassiere.",
     s_new: ["Ordine inviato", "Aspettiamo che il cassiere lo accetti. Passa alla cassa per pagare."],
     s_accepted: ["In preparazione", "Ordine accettato. Chiameremo il tuo numero quando è pronto."],
     s_ready: ["Pronto! Ritira alla cassa", "Mostra questo numero alla cassa."],
@@ -365,6 +391,7 @@ const T = {
     comment: "Anmerkung", optional: "(optional)", payInfo: "Bezahlung an der Kasse bei Abholung — bar oder mit Karte.",
     send: "Bestellung senden", sending: "Wird gesendet…", items: n => `${n} ${n === 1 ? "Artikel" : "Artikel"}`, show: "Warenkorb",
     yourOrder: "Ihre Bestellung", newOrder: "Neue Bestellung", footer: "Pasta to go · Bestellen per QR",
+    allergens: "Allergene", alNote: "Allergene laut unserer Rezeptur. Wenn Sie eine Allergie haben, sagen Sie es bitte an der Kasse.",
     s_new: ["Bestellung gesendet", "Wir warten, bis die Kasse sie annimmt. Bitte zum Bezahlen an die Kasse kommen."],
     s_accepted: ["Wird zubereitet", "Bestellung angenommen. Wir rufen Ihre Nummer, wenn sie fertig ist."],
     s_ready: ["Fertig! Bitte an der Kasse abholen", "Zeigen Sie diese Nummer an der Kasse."],
@@ -383,6 +410,7 @@ const T = {
     comment: "ملاحظة", optional: "(اختياري)", payInfo: "الدفع عند الصندوق عند الاستلام — نقدًا أو بالبطاقة.",
     send: "إرسال الطلب", sending: "جارٍ الإرسال…", items: n => `${n} ${n === 1 ? "صنف" : "أصناف"}`, show: "السلة",
     yourOrder: "طلبك", newOrder: "طلب جديد", footer: "Pasta to go · الطلب عبر QR",
+    allergens: "مسببات الحساسية", alNote: "مسببات الحساسية مذكورة حسب وصفاتنا. إذا كانت لديك حساسية، يرجى إخبار أمين الصندوق.",
     s_new: ["تم إرسال الطلب", "ننتظر قبول الكاشير للطلب. يرجى التوجه إلى الصندوق للدفع."],
     s_accepted: ["قيد التحضير", "تم قبول طلبك. سننادي برقمك عندما يجهز."],
     s_ready: ["جاهز! استلمه من الصندوق", "أظهر هذا الرقم عند الصندوق."],
@@ -401,6 +429,7 @@ const T = {
     comment: "टिप्पणी", optional: "(वैकल्पिक)", payInfo: "भुगतान काउंटर पर, ऑर्डर लेते समय — नकद या कार्ड से।",
     send: "ऑर्डर भेजें", sending: "भेजा जा रहा है…", items: n => `${n} आइटम`, show: "टोकरी",
     yourOrder: "आपका ऑर्डर", newOrder: "नया ऑर्डर", footer: "Pasta to go · QR से ऑर्डर",
+    allergens: "एलर्जेन", alNote: "एलर्जेन हमारी रेसिपी के अनुसार बताए गए हैं। अगर आपको कोई एलर्जी है, तो कृपया कैशियर को बताएं।",
     s_new: ["ऑर्डर भेज दिया गया", "कैशियर के स्वीकार करने का इंतज़ार है। भुगतान के लिए काउंटर पर आएँ।"],
     s_accepted: ["तैयार हो रहा है", "ऑर्डर स्वीकार हो गया। तैयार होने पर हम आपका नंबर पुकारेंगे।"],
     s_ready: ["तैयार! काउंटर से ले लें", "यह नंबर काउंटर पर दिखाएँ।"],
@@ -432,6 +461,7 @@ let menu = null, cart = store.get("cart", {}), activeOrder = store.get("order", 
 const t = k => T[lang || "en"][k];
 const money = v => `${(+v).toLocaleString(LOCALE[lang] || "en-GB", { maximumFractionDigits: 2 })} ${t("cur")}`;
 const dishName = d => { const x = DISH[d.id]; return x && x.ru === d.name && x[lang] ? x[lang] : d.name; };
+const algText = x => Object.keys(ALG).filter(c => (x?.allergens || []).includes(c)).map(c => ALG[c][lang] || ALG[c].en).join(", ");
 const addonName = a => { const x = ADDON[a.id]; return x && x.ru === a.name && x[lang] ? x[lang] : a.name; };
 /* cart: { "dishId" | "dishId|addon1,addon2": qty } */
 const keyOf = (id, adds) => adds.length ? `${id}|${[...adds].sort().join(",")}` : id;
@@ -440,7 +470,7 @@ const addonsFor = d => (menu?.addons || []).filter(a => a.available && (a.catego
 const qtyOf = id => Object.entries(cart).reduce((s, [k, q]) => s + (parseKey(k).id === id ? q : 0), 0);
 const catName = c => (lang !== "ru" && CAT[c]?.[lang]) || c;
 // photo uploaded from the register wins; otherwise the temporary one in img/
-const img = id => menu?.items.find(i => i.id === id)?.photo || `img/${encodeURIComponent(id)}.jpg?v=${IMG_V}`;
+const img = id => menu?.items.find(i => i.id === id)?.photo || `img/${encodeURIComponent(id.replace(/-[ml]$/, ""))}.jpg?v=${IMG_V}`;
 
 async function rpc(fn, body = {}) {
   const r = await fetch(API + fn, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
@@ -496,7 +526,7 @@ function dishHTML(d) {
     : q ? stepHTML(d.id, q) : `<button type="button" class="add" data-inc="${esc(d.id)}" aria-label="${esc(t("addOne"))}: ${esc(name)}">+</button>`;
   return `<article class="dish${d.available ? "" : " out"}">
     <div class="ph"><img src="${img(d.id)}" alt="" loading="lazy" decoding="async" data-ph>${d.available ? "" : `<span class="tag">${t("out")}</span>`}</div>
-    <div class="body"><h3>${esc(name)}</h3><div class="row"><span class="price">${money(d.price)}</span>${ctl}</div></div></article>`;
+    <div class="body"><h3>${esc(name)}</h3>${d.allergens?.length ? `<p class="alg"><b>${esc(t("allergens"))}:</b> ${esc(algText(d))}</p>` : ""}<div class="row"><span class="price">${money(d.price)}</span>${ctl}</div></div></article>`;
 }
 const stepHTML = (id, q) => `<div class="step"><button type="button" data-dec="${esc(id)}" aria-label="${esc(t("remove"))}">−</button><span>${q}</span><button type="button" data-inc="${esc(id)}" aria-label="${esc(t("addOne"))}">+</button></div>`;
 // photo missing → neutral placeholder instead of a broken image
@@ -575,7 +605,7 @@ function openAddons(id) {
   aDish = menu?.items.find(i => i.id === id); if (!aDish) return;
   $("#aTitle").textContent = dishName(aDish);
   $("#aImg").src = img(aDish.id);
-  $("#aOpts").innerHTML = addonsFor(aDish).map(a => `<label class="aopt"><input type="checkbox" value="${esc(a.id)}"><span>${esc(addonName(a))}</span><b>+${money(a.price)}</b></label>`).join("");
+  $("#aOpts").innerHTML = addonsFor(aDish).map(a => `<label class="aopt"><input type="checkbox" value="${esc(a.id)}"><span>${esc(addonName(a))}${a.allergens?.length ? `<small class="alg">${esc(t("allergens"))}: ${esc(algText(a))}</small>` : ""}</span><b>+${money(a.price)}</b></label>`).join("");
   aPrice(); $("#aSheet").hidden = false; document.body.style.overflow = "hidden";
 }
 function aChecked() { return [...$("#aOpts").querySelectorAll("input:checked")].map(i => i.value); }
